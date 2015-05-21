@@ -36,10 +36,6 @@ public class MusicPlayerActivityFragment extends Fragment {
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (players[no] != null) {
-                        players[no].release();
-                        players[no] = null;
-                    }
                     playMusic(no);
                 }
             });
@@ -49,6 +45,10 @@ public class MusicPlayerActivityFragment extends Fragment {
     }
 
     public void playMusic(int i){
+        if (players[i] != null) {
+            players[i].release();
+            players[i] = null;
+        }
         players[i] = MediaPlayer.create(getActivity(), musicId[i]);
         players[i].start();
     }
