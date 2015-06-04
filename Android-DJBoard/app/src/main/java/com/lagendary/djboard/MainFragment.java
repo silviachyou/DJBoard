@@ -98,12 +98,13 @@ public class MainFragment extends Fragment {
 
     private MediaPlayer[] players = new MediaPlayer[1];
 
-    private static final int SOUND_POOL_NO = 3;
+    private static final int SOUND_POOL_NO = 5;
 
     private static final int DRUM_SOUND_INDEX = 0;
     private static final int BOARD_UP_SOUND_INDEX = 1;
-
     private static final int BASE_SOUND_ALIEN_INDEX = 2;
+    private static final int BASE_SOUND_CHASER_INDEX = 3;
+    private static final int BASE_SOUND_BEATBOX_INDEX = 4;
 
     private int[] soundIds = new int[SOUND_POOL_NO];
     private int[] streamIds = new int[SOUND_POOL_NO];
@@ -194,6 +195,8 @@ public class MainFragment extends Fragment {
         soundIds[DRUM_SOUND_INDEX] = soundPool.load(getActivity(), R.raw.drum_loop, 1);
         soundIds[BOARD_UP_SOUND_INDEX] = soundPool.load(getActivity(), R.raw.yooo, 1);
         soundIds[BASE_SOUND_ALIEN_INDEX] = soundPool.load(getActivity(), R.raw.alien, 1);
+        soundIds[BASE_SOUND_CHASER_INDEX] = soundPool.load(getActivity(), R.raw.chaser, 1);
+        soundIds[BASE_SOUND_BEATBOX_INDEX] = soundPool.load(getActivity(), R.raw.beatbox, 1);
     }
 
     /**
@@ -503,14 +506,22 @@ public class MainFragment extends Fragment {
                 }else{
                     soundPool.stop(streamIds[BASE_SOUND_ALIEN_INDEX]);
                 }
-
-                //playMusic(0, R.raw.the_night_out);
                 break;
             case "knockMid":
-                //stopMusic(0);
+                soundPlaying[BASE_SOUND_CHASER_INDEX] = !soundPlaying[BASE_SOUND_CHASER_INDEX];
+                if(soundPlaying[BASE_SOUND_CHASER_INDEX]) {
+                    streamIds[BASE_SOUND_CHASER_INDEX] = soundPool.play(soundIds[BASE_SOUND_CHASER_INDEX], 1.0f, 1.0f, 1, -1, 1.0f);
+                }else{
+                    soundPool.stop(streamIds[BASE_SOUND_CHASER_INDEX]);
+                }
                 break;
             case "knockBack":
-                //stopMusic(0);
+                soundPlaying[BASE_SOUND_BEATBOX_INDEX] = !soundPlaying[BASE_SOUND_BEATBOX_INDEX];
+                if(soundPlaying[BASE_SOUND_BEATBOX_INDEX]) {
+                    streamIds[BASE_SOUND_BEATBOX_INDEX] = soundPool.play(soundIds[BASE_SOUND_BEATBOX_INDEX], 1.0f, 1.0f, 1, -1, 1.0f);
+                }else{
+                    soundPool.stop(streamIds[BASE_SOUND_BEATBOX_INDEX]);
+                }
                 break;
         }
     }
