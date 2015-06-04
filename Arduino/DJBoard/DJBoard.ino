@@ -1,13 +1,13 @@
 #include <SoftwareSerial.h>
 #define TO_DEG(x) (x * 57.2957795131)  // *180/pi
 
-const char playWheelMusic[] = "wheelmove\0";
-const char stopWheelMusic[] = "wheelstop\0";
-const char playBoardUpMusic[] = "boardup\0";
-const char stopBoardUpMusic[] = "boarddown\0";
-const char turnRight[] = "turnright\0";
-const char turnLeft[] = "turnleft\0";
-const char changeDrt[] = "stopRolling\0";
+const char playWheelMusic[] = "wheelmove\n";
+const char stopWheelMusic[] = "wheelstop\n";
+const char playBoardUpMusic[] = "boardup\n";
+const char stopBoardUpMusic[] = "boarddown\n";
+const char turnRight[] = "turnright\n";
+const char turnLeft[] = "turnleft\n";
+const char changeDrt[] = "stopRolling\n";
 
 int rx = 10;
 int tx = 11;
