@@ -1,6 +1,4 @@
 #include <SoftwareSerial.h>
-#define TO_DEG(x) (x * 57.2957795131)  // *180/pi
-
 const char playWheelMusic[] = "wheelmove\n";
 const char stopWheelMusic[] = "wheelstop\n";
 const char playBoardUpMusic[] = "boardup\n";
@@ -9,16 +7,19 @@ const char turnRight[] = "turnright\n";
 const char turnLeft[] = "turnleft\n";
 const char changeDrt[] = "stopRolling\n";
 
+#define TO_RAD(x) (x * 0.01745329252)  // *pi/180
+#define TO_DEG(x) (x * 57.2957795131)  // *180/pi
+
+/***** DEFINE PIN *******/
 int rx = 10;
 int tx = 11;
 int led = 13;
 int iRSensorPin = 3;
-int IRVal;
-bool isBlack;
-unsigned long time, duration;
-bool isMoving;
 SoftwareSerial Bluetooth(rx,tx);//定義PIN10及PIN11分別為RX及TX腳位
 
+
+int IRVal;
+unsigned long time, duration;
 // Euler angles
 float yaw;
 float pitch; // up down >= |+-170|
@@ -28,18 +29,26 @@ float previousRoll;
 int previousDrt=1;
 int count=0, s=0, r=0;
 
+
+/***** FLAGS ******/
+bool isBlack;
+bool isMoving;
+bool isBoardUp;
+
+
 void setup()
 {
   razorSetup();
   
-  //Serial.begin(9600);
-  Bluetooth.begin(115200);  //Baud Rate: 9600
+  Bluetooth.begin(115200);
   pinMode(led,OUTPUT);
   pinMode(iRSensorPin,INPUT);
   time = millis();
+  
   isBlack = false;
   isMoving = false;
   previousRoll=roll;
+  isBoardUp = false;
 }
 
 void loop()
@@ -57,6 +66,7 @@ void loop()
 }
 
 void checkWheelMove(){
+  
   IRVal=digitalRead(iRSensorPin);
 
   //HIGH: white
@@ -72,7 +82,6 @@ void checkWheelMove(){
       Bluetooth.write(playWheelMusic);
       isMoving = true;
     }
-      
     
   }
   else if(IRVal==LOW) {  //isBlack
@@ -83,43 +92,26 @@ void checkWheelMove(){
      // Serial.println("Board Stopped");
       Bluetooth.write(stopWheelMusic);
       isMoving = false;
-  }  IRVal=digitalRead(iRSensorPin);
-
-  //HIGH: white
-  //LOW: black
-  if(IRVal==HIGH && isBlack){  //first seen white
-    digitalWrite(led,HIGH);
-    duration = millis()-time;
-  //  Serial.println(duration);
-    time = millis();
-    isBlack = false;
-    if(!isMoving){
-   //   Serial.println("Board Move");
-      Bluetooth.write(playWheelMusic);
-      isMoving = true;
-    }
-      
-    
-  }
-  else if(IRVal==LOW) {  //isBlack
-    digitalWrite(led,LOW);
-    isBlack = true;
-  }
-  if(millis()-time>1000 && isMoving){
-   //   Serial.println("Board Stopped");
-      Bluetooth.write(stopWheelMusic);
-      isMoving = false;
-  }
+  }  
 }
 
 void checkBoardUp(){
-  
-//  if( pitch>= 25 && pitch <= 35){
-//    Bluetooth.write(playBoardUpMusic);
-//  }
-//  
 
+  if( TO_DEG(pitch) >= 25 && TO_DEG(pitch) <= 35 && !isBoardUp){
+    Serial.println("Board Up");
+    Bluetooth.write(playBoardUpMusic);
+    isBoardUp = true;
+  }
+  
+  else if( TO_DEG(pitch) >= -5 && TO_DEG(pitch) <= 5 && isBoardUp){
+    Serial.println("Board Down");
+    Bluetooth.write(stopBoardUpMusic);
+    isBoardUp = false;
+  }
+  
 }
+
+
 
 
 void rolling(){
@@ -529,7 +521,7 @@ const float magn_ellipsoid_transform[3][3] = {{0.902, -0.00354, 0.000636}, {-0.0
 // Stuff
 #define STATUS_LED_PIN 13  // Pin number of status LED
 #define GRAVITY 256.0f // "1G reference" used for DCM filter and accelerometer calibration
-#define TO_RAD(x) (x * 0.01745329252)  // *pi/180
+
 
 // Sensor variables
 float accel[3];  // Actually stores the NEGATED acceleration (equals gravity, if board not moving).
