@@ -1,8 +1,8 @@
 #include <SoftwareSerial.h>
-const char playWheelMusic[] = "wheelmove\0";
-const char stopWheelMusic[] = "wheelstop\0";
-const char playBoardUpMusic[] = "boardup\0";
-const char stopBoardUpMusic[] = "boarddown\0";
+const char playWheelMusic[] = "wheelmove\n";
+const char stopWheelMusic[] = "wheelstop\n";
+const char playBoardUpMusic[] = "boardup\n";
+const char stopBoardUpMusic[] = "boarddown\n";
 
 int rx = 10;
 int tx = 11;
