@@ -1,16 +1,23 @@
 #include <SoftwareSerial.h>
-const char playWheelMusic = 'p';
-const char stopWheelMusic = 's';
+const char playWheelMusic[] = "wheelmove\0";
+const char stopWheelMusic[] = "wheelstop\0";
+const char playBoardUpMusic[] = "boardup\0";
+const char stopBoardUpMusic[] = "boarddown\0";
 
 int rx = 10;
 int tx = 11;
-int led=13;
-int iRSensorPin=3;
+int led = 13;
+int iRSensorPin = 3;
 int IRVal;
 bool isBlack;
 unsigned long time, duration;
 bool isMoving;
 SoftwareSerial Bluetooth(rx,tx);//定義PIN10及PIN11分別為RX及TX腳位
+
+// Euler angles
+float yaw;
+float pitch;
+float roll;
 
 void setup()
 {
@@ -28,8 +35,39 @@ void setup()
 void loop()
 {
   razorLoop();
-  
+  checkWheelMove();
+  checkBoardUp();
+
+}
+
+void checkWheelMove(){
   IRVal=digitalRead(iRSensorPin);
+
+  //HIGH: white
+  //LOW: black
+  if(IRVal==HIGH && isBlack){  //first seen white
+    digitalWrite(led,HIGH);
+    duration = millis()-time;
+    Serial.println(duration);
+    time = millis();
+    isBlack = false;
+    if(!isMoving){
+      Serial.println("Board Move");
+      Bluetooth.write(playWheelMusic);
+      isMoving = true;
+    }
+      
+    
+  }
+  else if(IRVal==LOW) {  //isBlack
+    digitalWrite(led,LOW);
+    isBlack = true;
+  }
+  if(millis()-time>1000 && isMoving){
+      Serial.println("Board Stopped");
+      Bluetooth.write(stopWheelMusic);
+      isMoving = false;
+  }  IRVal=digitalRead(iRSensorPin);
 
   //HIGH: white
   //LOW: black
@@ -58,8 +96,14 @@ void loop()
   }
 }
 
+void checkBoardUp(){
+  
+//  if( pitch>= 25 && pitch <= 35){
+//    Bluetooth.write(playBoardUpMusic);
+//  }
+//  
 
-
+}
 
 
 
@@ -443,10 +487,7 @@ float DCM_Matrix[3][3] = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
 float Update_Matrix[3][3] = {{0, 1, 2}, {3, 4, 5}, {6, 7, 8}};
 float Temporary_Matrix[3][3] = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
 
-// Euler angles
-float yaw;
-float pitch;
-float roll;
+
 
 // DCM timing in the main loop
 unsigned long timestamp;
