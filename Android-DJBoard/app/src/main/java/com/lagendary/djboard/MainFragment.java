@@ -21,7 +21,9 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -52,6 +54,9 @@ public class MainFragment extends Fragment {
 
     private static final String TAG = "BluetoothChatFragment";
 
+
+    private static final String BOARD_ACTION_TAG = "Action";
+
     // Intent request codes
     private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
     private static final int REQUEST_CONNECT_DEVICE_INSECURE = 2;
@@ -61,6 +66,8 @@ public class MainFragment extends Fragment {
     private ListView mConversationView;
     private EditText mOutEditText;
     private Button mSendButton;
+
+    private StringBuilder msgBuilder = new StringBuilder();
 
     /**
      * Name of the connected device
@@ -87,8 +94,17 @@ public class MainFragment extends Fragment {
      */
     private BluetoothService mChatService = null;
 
+    private SoundPool soundPool;
 
     private MediaPlayer[] players = new MediaPlayer[1];
+
+    private static final int SOUND_POOL_NO = 2;
+
+    private static final int DRUM_SOUND_INDEX = 0;
+    private static final int BOARD_UP_SOUND_INDEX = 1;
+
+    private int[] soundIds = new int[SOUND_POOL_NO];
+    private int[] streamIds = new int[SOUND_POOL_NO];
 
 
     @Override
@@ -104,6 +120,7 @@ public class MainFragment extends Fragment {
             Toast.makeText(activity, "Bluetooth is not available", Toast.LENGTH_LONG).show();
             activity.finish();
         }
+        initSoundPool();
     }
 
 
@@ -156,6 +173,22 @@ public class MainFragment extends Fragment {
         mConversationView = (ListView) view.findViewById(R.id.in);
         mOutEditText = (EditText) view.findViewById(R.id.edit_text_out);
         mSendButton = (Button) view.findViewById(R.id.button_send);
+    }
+
+    private void initSoundPool() {
+        soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 1);
+        soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+
+            @Override
+            public void onLoadComplete(SoundPool soundPool, int sampleId,
+                                       int arg2) {
+                Log.d(TAG, "music " + sampleId + " load complete");
+                //soundPool.play(sampleId, 1.0f, 1.0f, 1, 0, 1.0f);
+            }
+
+        });
+        soundIds[DRUM_SOUND_INDEX] = soundPool.load(getActivity(), R.raw.drum_loop, 1);
+        soundIds[BOARD_UP_SOUND_INDEX] = soundPool.load(getActivity(), R.raw.yooo, 1);
     }
 
     /**
@@ -422,13 +455,41 @@ public class MainFragment extends Fragment {
         }
     }
 
+
     public void processReceivedMessage(String msg) {
+        for(int i = 0 ;i < msg.length(); i++){
+            char c = msg.charAt(i);
+            if(c != '\n') {
+                msgBuilder.append(c);
+            }else{
+                //is empty char
+                String action = msgBuilder.toString();
+                actionForMessage(action);
+                msgBuilder = new StringBuilder();
+            }
+        }
+
+
+    }
+
+    private void actionForMessage(String msg){
+        mConversationArrayAdapter.add(BOARD_ACTION_TAG + ":  " + msg);
         switch (msg) {
-            case "p":
-                playMusic(0, R.raw.the_night_out);
+            case "wheelmove":
+                soundPool.stop(streamIds[DRUM_SOUND_INDEX]);
+                streamIds[DRUM_SOUND_INDEX] = soundPool.play(soundIds[DRUM_SOUND_INDEX], 1.0f, 1.0f, 1, -1, 1.0f);
+                //playMusic(0, R.raw.the_night_out);
                 break;
-            case "s":
-                stopMusic(0);
+            case "wheelstop":
+                soundPool.stop(streamIds[DRUM_SOUND_INDEX]);
+                //stopMusic(0);
+                break;
+            case "boardup":
+                streamIds[0] = soundPool.play(soundIds[BOARD_UP_SOUND_INDEX], 1.0f, 1.0f, 1, 0, 1.0f);
+                //playMusic(0, R.raw.the_night_out);
+                break;
+            case "boarddown":
+                //stopMusic(0);
                 break;
         }
     }
