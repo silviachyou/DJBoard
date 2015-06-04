@@ -6,9 +6,9 @@ const char stopBoardUpMusic[] = "boarddown\n";
 const char turnRight[] = "turnright\n";
 const char turnLeft[] = "turnleft\n";
 const char changeDrt[] = "stopRolling\n";
-const char knockFront[] = "\n";
-const char knockMid[] = "\n";
-const char knockBack[] = "\n";
+const char knockFront[] = "knockFront\n";
+const char knockMid[] = "knockMid\n";
+const char knockBack[] = "knockBack\n";
 
 #define TO_RAD(x) (x * 0.01745329252)  // *pi/180
 #define TO_DEG(x) (x * 57.2957795131)  // *180/pi
