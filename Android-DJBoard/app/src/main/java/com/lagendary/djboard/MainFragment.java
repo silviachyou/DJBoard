@@ -22,6 +22,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -92,8 +93,10 @@ public class MainFragment extends Fragment {
      */
     private BluetoothService mChatService = null;
 
+    private SoundPool soundPool;
 
-    private MediaPlayer[] players = new MediaPlayer[1];
+    private int[] soundIds = new int[1];
+    private int[] streamIds = new int[1];
 
 
     @Override
@@ -109,6 +112,7 @@ public class MainFragment extends Fragment {
             Toast.makeText(activity, "Bluetooth is not available", Toast.LENGTH_LONG).show();
             activity.finish();
         }
+        initSoundPool();
     }
 
 
@@ -161,6 +165,13 @@ public class MainFragment extends Fragment {
         mConversationView = (ListView) view.findViewById(R.id.in);
         mOutEditText = (EditText) view.findViewById(R.id.edit_text_out);
         mSendButton = (Button) view.findViewById(R.id.button_send);
+    }
+
+    private void initSoundPool() {
+        soundPool = new SoundPool.Builder()
+                        .setMaxStreams(10)
+                        .build();
+        soundIds[0] = soundPool.load(getActivity(), R.raw.the_night_out, 1);
     }
 
     /**
@@ -414,19 +425,6 @@ public class MainFragment extends Fragment {
         return false;
     }
 
-    public void playMusic(int musicPlayerNo, int resId){
-        stopMusic(musicPlayerNo);
-        players[musicPlayerNo] = MediaPlayer.create(getActivity(), resId);
-        players[musicPlayerNo].start();
-    }
-
-    public void stopMusic(int musicPlayerNo){
-        if (players[musicPlayerNo] != null) {
-            players[musicPlayerNo].release();
-            players[musicPlayerNo] = null;
-        }
-    }
-
     public void processReceivedMessage(String msg) {
         for(int i = 0 ;i < msg.length(); i++){
             char c = msg.charAt(i);
@@ -447,10 +445,10 @@ public class MainFragment extends Fragment {
         mConversationArrayAdapter.add(BOARD_ACTION_TAG + ":  " + msg);
         switch (msg) {
             case "wheelmove":
-                playMusic(0, R.raw.the_night_out);
+                streamIds[0] = soundPool.play(soundIds[0], 1.0f, 1.0f, 1, -1, 1.0f);
                 break;
             case "wheelstop":
-                stopMusic(0);
+                soundPool.stop(streamIds[0]);
                 break;
         }
     }
