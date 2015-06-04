@@ -96,6 +96,8 @@ public class MainFragment extends Fragment {
 
     private SoundPool soundPool;
 
+    private MediaPlayer[] players = new MediaPlayer[1];
+
     private int[] soundIds = new int[1];
     private int[] streamIds = new int[1];
 
@@ -176,7 +178,7 @@ public class MainFragment extends Fragment {
             public void onLoadComplete(SoundPool soundPool, int sampleId,
                                        int arg2) {
                 Log.d(TAG, "music " + sampleId + " load complete");
-                soundPool.play(sampleId, 1.0f, 1.0f, 1, 0, 1.0f);
+                //soundPool.play(sampleId, 1.0f, 1.0f, 1, 0, 1.0f);
             }
 
         });
@@ -434,6 +436,20 @@ public class MainFragment extends Fragment {
         return false;
     }
 
+    public void playMusic(int musicPlayerNo, int resId){
+        stopMusic(musicPlayerNo);
+        players[musicPlayerNo] = MediaPlayer.create(getActivity(), resId);
+        players[musicPlayerNo].start();
+    }
+
+    public void stopMusic(int musicPlayerNo){
+        if (players[musicPlayerNo] != null) {
+            players[musicPlayerNo].release();
+            players[musicPlayerNo] = null;
+        }
+    }
+
+
     public void processReceivedMessage(String msg) {
         for(int i = 0 ;i < msg.length(); i++){
             char c = msg.charAt(i);
@@ -454,10 +470,12 @@ public class MainFragment extends Fragment {
         mConversationArrayAdapter.add(BOARD_ACTION_TAG + ":  " + msg);
         switch (msg) {
             case "wheelmove":
-                streamIds[0] = soundPool.play(soundIds[0], 1.0f, 1.0f, 1, -1, 1.0f);
+                //streamIds[0] = soundPool.play(soundIds[0], 1.0f, 1.0f, 1, -1, 1.0f);
+                playMusic(0, R.raw.the_night_out);
                 break;
             case "wheelstop":
-                soundPool.stop(streamIds[0]);
+                //soundPool.stop(streamIds[0]);
+                stopMusic(0);
                 break;
         }
     }
