@@ -9,6 +9,7 @@ int tx = 11;
 int led = 13;
 int iRSensorPin = 3;
 int IRVal;
+int knockSensor = 7;
 bool isBlack;
 unsigned long time, duration;
 bool isMoving;
@@ -105,7 +106,12 @@ void checkBoardUp(){
 
 }
 
-
+void checkKnock(){
+   int sensorReading = 0; 
+   sensorReading = digitalRead(knockSensor);
+   if(sensorReading == 0)
+     Serial.println("Knock");
+}
 
 
 
