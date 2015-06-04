@@ -98,13 +98,17 @@ public class MainFragment extends Fragment {
 
     private MediaPlayer[] players = new MediaPlayer[1];
 
-    private static final int SOUND_POOL_NO = 2;
+    private static final int SOUND_POOL_NO = 3;
 
     private static final int DRUM_SOUND_INDEX = 0;
     private static final int BOARD_UP_SOUND_INDEX = 1;
 
+    private static final int BASE_SOUND_ALIEN_INDEX = 2;
+
     private int[] soundIds = new int[SOUND_POOL_NO];
     private int[] streamIds = new int[SOUND_POOL_NO];
+
+    private boolean[] soundPlaying = new boolean[SOUND_POOL_NO]; // sparse, depends on if is toggled by the developer
 
 
     @Override
@@ -189,6 +193,7 @@ public class MainFragment extends Fragment {
         });
         soundIds[DRUM_SOUND_INDEX] = soundPool.load(getActivity(), R.raw.drum_loop, 1);
         soundIds[BOARD_UP_SOUND_INDEX] = soundPool.load(getActivity(), R.raw.yooo, 1);
+        soundIds[BASE_SOUND_ALIEN_INDEX] = soundPool.load(getActivity(), R.raw.alien, 1);
     }
 
     /**
@@ -489,6 +494,22 @@ public class MainFragment extends Fragment {
                 //playMusic(0, R.raw.the_night_out);
                 break;
             case "boarddown":
+                //stopMusic(0);
+                break;
+            case "knockFront":
+                soundPlaying[BASE_SOUND_ALIEN_INDEX] = !soundPlaying[BASE_SOUND_ALIEN_INDEX];
+                if(soundPlaying[BASE_SOUND_ALIEN_INDEX]) {
+                    streamIds[BASE_SOUND_ALIEN_INDEX] = soundPool.play(soundIds[BOARD_UP_SOUND_INDEX], 1.0f, 1.0f, 1, -1, 1.0f);
+                }else{
+                    soundPool.stop(streamIds[BASE_SOUND_ALIEN_INDEX]);
+                }
+
+                //playMusic(0, R.raw.the_night_out);
+                break;
+            case "knockMid":
+                //stopMusic(0);
+                break;
+            case "knockBack":
                 //stopMusic(0);
                 break;
         }
