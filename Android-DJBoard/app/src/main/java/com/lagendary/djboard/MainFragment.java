@@ -52,6 +52,9 @@ public class MainFragment extends Fragment {
 
     private static final String TAG = "BluetoothChatFragment";
 
+
+    private static final String BOARD_ACTION_TAG = "Action";
+
     // Intent request codes
     private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
     private static final int REQUEST_CONNECT_DEVICE_INSECURE = 2;
@@ -61,6 +64,8 @@ public class MainFragment extends Fragment {
     private ListView mConversationView;
     private EditText mOutEditText;
     private Button mSendButton;
+
+    private StringBuilder msgBuilder = new StringBuilder();
 
     /**
      * Name of the connected device
@@ -423,11 +428,28 @@ public class MainFragment extends Fragment {
     }
 
     public void processReceivedMessage(String msg) {
+        for(int i = 0 ;i < msg.length(); i++){
+            char c = msg.charAt(i);
+            if(c != '\n') {
+                msgBuilder.append(c);
+            }else{
+                //is empty char
+                String action = msgBuilder.toString();
+                actionForMessage(action);
+                msgBuilder = new StringBuilder();
+            }
+        }
+
+
+    }
+
+    private void actionForMessage(String msg){
+        mConversationArrayAdapter.add(BOARD_ACTION_TAG + ":  " + msg);
         switch (msg) {
-            case "p":
+            case "wheelmove":
                 playMusic(0, R.raw.the_night_out);
                 break;
-            case "s":
+            case "wheelstop":
                 stopMusic(0);
                 break;
         }
