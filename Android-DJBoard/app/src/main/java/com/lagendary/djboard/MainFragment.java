@@ -96,17 +96,21 @@ public class MainFragment extends Fragment {
 
     private SoundPool soundPool;
 
-    private MediaPlayer[] players = new MediaPlayer[1];
+    private static final int[] SOUND_RES_IDS = {R.raw.drum_loop, R.raw.yooo, R.raw.piano, R.raw.chaser, R.raw.beatbox};
 
-    private static final int SOUND_POOL_NO = 3;
+    private static final int SOUND_POOL_NO = SOUND_RES_IDS.length;
 
     private static final int DRUM_SOUND_INDEX = 0;
     private static final int BOARD_UP_SOUND_INDEX = 1;
-
-    private static final int BASE_SOUND_ALIEN_INDEX = 2;
+    private static final int BASE_SOUND_PIANO_INDEX = 2;
+    private static final int BASE_SOUND_CHASER_INDEX = 3;
+    private static final int BASE_SOUND_BEATBOX_INDEX = 4;
 
     private int[] soundIds = new int[SOUND_POOL_NO];
     private int[] streamIds = new int[SOUND_POOL_NO];
+
+
+    private MediaPlayer[] players = new MediaPlayer[SOUND_POOL_NO];
 
     private boolean[] soundPlaying = new boolean[SOUND_POOL_NO]; // sparse, depends on if is toggled by the developer
 
@@ -191,9 +195,11 @@ public class MainFragment extends Fragment {
             }
 
         });
-        soundIds[DRUM_SOUND_INDEX] = soundPool.load(getActivity(), R.raw.drum_loop, 1);
-        soundIds[BOARD_UP_SOUND_INDEX] = soundPool.load(getActivity(), R.raw.yooo, 1);
-        soundIds[BASE_SOUND_ALIEN_INDEX] = soundPool.load(getActivity(), R.raw.alien, 1);
+
+
+        for(int i = 0; i < SOUND_POOL_NO; i++) {
+            soundIds[i] = soundPool.load(getActivity(), SOUND_RES_IDS[i], 1);
+        }
     }
 
     /**
@@ -447,9 +453,36 @@ public class MainFragment extends Fragment {
         return false;
     }
 
-    public void playMusic(int musicPlayerNo, int resId){
+
+    public void toggleLoopMusicWithNoFromSoundPool(int musicPlayerNo, float volume){
+        soundPlaying[musicPlayerNo] = !soundPlaying[musicPlayerNo];
+        if(soundPlaying[musicPlayerNo]) {
+            streamIds[musicPlayerNo] = soundPool.play(soundIds[musicPlayerNo], volume, volume, 1, -1, 1.0f);
+        }else{
+            soundPool.stop(streamIds[musicPlayerNo]);
+        }
+    }
+
+    public void toggleLoopMusicWithNoWithVolume(int musicPlayerNo, float volume){
+
+        soundPlaying[musicPlayerNo] = !soundPlaying[musicPlayerNo];
+        if(soundPlaying[musicPlayerNo]) {
+            playLoopMusicWithNo(musicPlayerNo, volume);
+        }else{
+            stopMusic(musicPlayerNo);
+        }
+
+    }
+
+    public void playLoopMusicWithNo(int musicPlayerNo, float volume){
+        playMusic(musicPlayerNo, SOUND_RES_IDS[musicPlayerNo], true, volume);
+    }
+
+    public void playMusic(int musicPlayerNo, int resId, boolean looping, float volume){
         stopMusic(musicPlayerNo);
         players[musicPlayerNo] = MediaPlayer.create(getActivity(), resId);
+        players[musicPlayerNo].setLooping(looping);
+        players[musicPlayerNo].setVolume(volume, volume);
         players[musicPlayerNo].start();
     }
 
@@ -497,20 +530,13 @@ public class MainFragment extends Fragment {
                 //stopMusic(0);
                 break;
             case "knockFront":
-                soundPlaying[BASE_SOUND_ALIEN_INDEX] = !soundPlaying[BASE_SOUND_ALIEN_INDEX];
-                if(soundPlaying[BASE_SOUND_ALIEN_INDEX]) {
-                    streamIds[BASE_SOUND_ALIEN_INDEX] = soundPool.play(soundIds[BASE_SOUND_ALIEN_INDEX], 1.0f, 1.0f, 1, -1, 1.0f);
-                }else{
-                    soundPool.stop(streamIds[BASE_SOUND_ALIEN_INDEX]);
-                }
-
-                //playMusic(0, R.raw.the_night_out);
+                toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_PIANO_INDEX, 0.5f);
                 break;
             case "knockMid":
-                //stopMusic(0);
+                toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_CHASER_INDEX, 0.3f);
                 break;
             case "knockBack":
-                //stopMusic(0);
+                toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_BEATBOX_INDEX, 1.0f);
                 break;
         }
     }

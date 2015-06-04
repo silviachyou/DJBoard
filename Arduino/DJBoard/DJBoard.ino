@@ -159,6 +159,7 @@ void checkKnock(){
    sensorReading1 = digitalRead(knockSensor1);
    sensorReading2 = digitalRead(knockSensor2);
    sensorReading3 = digitalRead(knockSensor3);
+
    if(millis() - knocktime > 1000) {
      if(knockStatus1 != sensorReading1) {
        knocktime = millis();
