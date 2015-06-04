@@ -1,4 +1,6 @@
 #include <SoftwareSerial.h>
+#include <Ultrasonic.h>
+#include <stdio.h>
 const char playWheelMusic[] = "wheelmove\n";
 const char stopWheelMusic[] = "wheelstop\n";
 const char playBoardUpMusic[] = "boardup\n";
@@ -6,23 +8,35 @@ const char stopBoardUpMusic[] = "boarddown\n";
 const char turnRight[] = "turnright\n";
 const char turnLeft[] = "turnleft\n";
 const char changeDrt[] = "stopRolling\n";
+
 const char knockFront[] = "knockFront\n";
 const char knockMid[] = "knockMid\n";
 const char knockBack[] = "knockBack\n";
 
+const char playUltraSoundMusic_init[] = "ultrasound:";
+const char playUltraSoundMusic_init_add_num[] = "ultrasound:   0.00\n";
+const char stopUltraSoundMusic[] = "stop_ultrasound";
+
 #define TO_RAD(x) (x * 0.01745329252)  // *pi/180
 #define TO_DEG(x) (x * 57.2957795131)  // *180/pi
+#define Ultra_Sound_limit 100
 
 /***** DEFINE PIN *******/
 int rx = 10;
 int tx = 11;
 int led = 13;
 int iRSensorPin = 3;
+
 int knockSensor1 = 7;
 int knockSensor2 = 8;
 int knockSensor3 = 9;
 
+
+int TRIGGER_PIN = 5;
+int ECHO_PIN = 6;
+
 SoftwareSerial Bluetooth(rx,tx);//定義PIN10及PIN11分別為RX及TX腳位
+Ultrasonic ultrasonic(TRIGGER_PIN, ECHO_PIN);
 
 
 int IRVal;
@@ -35,15 +49,21 @@ float roll; // left right // 35
 float previousRoll;
 int previousDrt=1;
 int count=0, s=0, r=0;
+unsigned long rolltime=0;
 
+float Ultra_Sound_cmMsec;
+float Ultra_Sound_cmMsec_Init;
 
 /***** FLAGS ******/
 bool isBlack;
 bool isMoving;
 bool isBoardUp;
+
 bool knockStatus1 = 0;
 bool knockStatus2 = 0;
 bool knockStatus3 = 0;
+
+bool isControlUltra;
 
 
 void setup()
@@ -58,7 +78,13 @@ void setup()
   isBlack = false;
   isMoving = false;
   previousRoll=roll;
+  rolltime=millis();
   isBoardUp = false;
+
+  //UltraSonic
+  Ultra_Sound_cmMsec = ultrasonic.convert( ultrasonic.timing() , Ultrasonic::CM ); 
+  Ultra_Sound_cmMsec_Init = 0;
+  isControlUltra = false;
 }
 
 void loop()
@@ -66,11 +92,13 @@ void loop()
   razorLoop();
   checkWheelMove();
   checkBoardUp();
+
   checkKnock();
-  s++;
-  if(s==3800){
+
+  //checkUltraSound();
+  if(millis()-rolltime > 100){
     rolling();
-    s=0;
+    rolltime=millis();
   }
 }
 
@@ -151,6 +179,35 @@ void checkKnock(){
      }
    }
 }
+
+void checkUltraSound(){
+  Ultra_Sound_cmMsec = ultrasonic.convert( ultrasonic.timing() , Ultrasonic::CM ); 
+  if( Ultra_Sound_cmMsec < Ultra_Sound_limit && !isControlUltra ) { // first time hand in
+      Serial.print("Hand Start!!");
+      Ultra_Sound_cmMsec_Init = Ultra_Sound_cmMsec;
+      Serial.println(Ultra_Sound_cmMsec_Init);
+      Bluetooth.write(playUltraSoundMusic_init_add_num);
+      isControlUltra = true;    
+  }
+  else if( Ultra_Sound_cmMsec < Ultra_Sound_limit && isControlUltra ) { // control height
+    float diff_hand_control = Ultra_Sound_cmMsec_Init;
+   // Ultra_Sound_cmMsec = ultrasonic.convert( ultrasonic.timing() , Ultrasonic::CM ); 
+    diff_hand_control = Ultra_Sound_cmMsec - diff_hand_control;
+    char playUltraSoundMusic[80];
+    strcpy(playUltraSoundMusic,playUltraSoundMusic_init);
+    char s[80];
+    dtostrf(diff_hand_control,8, 2, s);
+    strcat(playUltraSoundMusic,s);  
+    Serial.println(playUltraSoundMusic);    
+    Bluetooth.write(playUltraSoundMusic);     
+  }
+  if(Ultra_Sound_cmMsec > Ultra_Sound_limit && isControlUltra ) { // stop 
+    Serial.println("Board Stopped");
+    Bluetooth.write(stopUltraSoundMusic);
+    isControlUltra = false;
+  }
+}
+
 
 void rolling(){
   //Serial.println("rolling");
