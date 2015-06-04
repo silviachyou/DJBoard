@@ -37,6 +37,7 @@ float roll; // left right // 35
 float previousRoll;
 int previousDrt=1;
 int count=0, s=0, r=0;
+unsigned long rolltime=0;
 
 float Ultra_Sound_cmMsec;
 float Ultra_Sound_cmMsec_Init;
@@ -60,6 +61,7 @@ void setup()
   isBlack = false;
   isMoving = false;
   previousRoll=roll;
+  rolltime=millis();
   isBoardUp = false;
 
   //UltraSonic
@@ -73,14 +75,12 @@ void loop()
   razorLoop();
   checkWheelMove();
   checkBoardUp();
-  checkUltraSound();
 
-  s++;
-  if(s==3800){
+  //checkUltraSound();
+  if(millis()-rolltime > 100){
     rolling();
-    s=0;
+    rolltime=millis();
   }
-  //delay(100);
 }
 
 void checkWheelMove(){
@@ -142,7 +142,7 @@ void checkUltraSound(){
   }
   else if( Ultra_Sound_cmMsec < Ultra_Sound_limit && isControlUltra ) { // control height
     float diff_hand_control = Ultra_Sound_cmMsec_Init;
-    Ultra_Sound_cmMsec = ultrasonic.convert( ultrasonic.timing() , Ultrasonic::CM ); 
+   // Ultra_Sound_cmMsec = ultrasonic.convert( ultrasonic.timing() , Ultrasonic::CM ); 
     diff_hand_control = Ultra_Sound_cmMsec - diff_hand_control;
     char playUltraSoundMusic[80];
     strcpy(playUltraSoundMusic,playUltraSoundMusic_init);
