@@ -6,6 +6,9 @@ const char stopBoardUpMusic[] = "boarddown\n";
 const char turnRight[] = "turnright\n";
 const char turnLeft[] = "turnleft\n";
 const char changeDrt[] = "stopRolling\n";
+const char knockFront[] = "\n";
+const char knockMid[] = "\n";
+const char knockBack[] = "\n";
 
 #define TO_RAD(x) (x * 0.01745329252)  // *pi/180
 #define TO_DEG(x) (x * 57.2957795131)  // *180/pi
@@ -15,12 +18,10 @@ int rx = 10;
 int tx = 11;
 int led = 13;
 int iRSensorPin = 3;
-int IRVal;
-int knockSensor = 7;
-int knockStatus = 0;
-bool isBlack;
-unsigned long time, duration;
-bool isMoving;
+int knockSensor1 = 7;
+int knockSensor2 = 8;
+int knockSensor3 = 9;
+
 SoftwareSerial Bluetooth(rx,tx);//定義PIN10及PIN11分別為RX及TX腳位
 
 
@@ -40,6 +41,9 @@ int count=0, s=0, r=0;
 bool isBlack;
 bool isMoving;
 bool isBoardUp;
+bool knockStatus1 = 0;
+bool knockStatus2 = 0;
+bool knockStatus3 = 0;
 
 
 void setup()
@@ -119,13 +123,34 @@ void checkBoardUp(){
 
 
 void checkKnock(){
-   int sensorReading = 0; 
-   sensorReading = digitalRead(knockSensor);
-   if(knockStatus != sensorReading) {
-     knockStatus = sensorReading;
-     if(knockStatus == 0)
-       Serial.println("Knock");
+   int sensorReading1 = 0; 
+   int sensorReading2 = 0;
+   int sensorReading3 = 0;
+   sensorReading1 = digitalRead(knockSensor1);
+   sensorReading2 = digitalRead(knockSensor2);
+   sensorReading3 = digitalRead(knockSensor3);
+   if(knockStatus1 != sensorReading1) {
+     knockStatus1 = sensorReading1;
+     if(knockStatus1 == 0) {
+       Serial.println("Knock Front");
+       Bluetooth.write(knockFront);
+     }
    }
+   if(knockStatus2 != sensorReading2) {
+     knockStatus2 = sensorReading2;
+     if(knockStatus2 == 0) {
+       Serial.println("Knock Mid");
+       Bluetooth.write(knockMid);
+     }
+   }
+   if(knockStatus3 != sensorReading3) {
+     knockStatus3 = sensorReading3;
+     if(knockStatus3 == 0) {
+       Serial.println("Knock Back");
+       Bluetooth.write(knockBack);
+     }
+   }
+}
 
 void rolling(){
   //Serial.println("rolling");
