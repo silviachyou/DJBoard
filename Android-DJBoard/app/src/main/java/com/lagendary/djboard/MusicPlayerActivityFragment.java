@@ -17,7 +17,7 @@ public class MusicPlayerActivityFragment extends Fragment {
 
     private LinearLayout view;
 
-    private static int[] musicId = {R.raw.the_night_out, R.raw.gunfire, R.raw.household_drill, R.raw.male_cough, R.raw.paper_ripping};
+    private static int[] musicId = {R.raw.the_night_out};
 
     private MediaPlayer[] players = new MediaPlayer[musicId.length];
 

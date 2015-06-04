@@ -485,7 +485,7 @@ public class MainFragment extends Fragment {
                 //stopMusic(0);
                 break;
             case "boardup":
-                streamIds[0] = soundPool.play(soundIds[BOARD_UP_SOUND_INDEX], 1.0f, 1.0f, 1, 0, 1.0f);
+                streamIds[BOARD_UP_SOUND_INDEX] = soundPool.play(soundIds[BOARD_UP_SOUND_INDEX], 1.0f, 1.0f, 1, 0, 1.0f);
                 //playMusic(0, R.raw.the_night_out);
                 break;
             case "boarddown":
