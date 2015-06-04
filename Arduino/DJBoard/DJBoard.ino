@@ -38,7 +38,7 @@ void loop()
   razorLoop();
   checkWheelMove();
   checkBoardUp();
-
+  checkKnock();
 }
 
 void checkWheelMove(){
