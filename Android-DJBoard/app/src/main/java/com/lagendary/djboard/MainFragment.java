@@ -98,8 +98,13 @@ public class MainFragment extends Fragment {
 
     private MediaPlayer[] players = new MediaPlayer[1];
 
-    private int[] soundIds = new int[1];
-    private int[] streamIds = new int[1];
+    private static final int SOUND_POOL_NO = 2;
+
+    private static final int DRUM_SOUND_INDEX = 0;
+    private static final int BOARD_UP_SOUND_INDEX = 1;
+
+    private int[] soundIds = new int[SOUND_POOL_NO];
+    private int[] streamIds = new int[SOUND_POOL_NO];
 
 
     @Override
@@ -182,7 +187,8 @@ public class MainFragment extends Fragment {
             }
 
         });
-        soundIds[0] = soundPool.load(getActivity(), R.raw.the_night_out, 1);
+        soundIds[DRUM_SOUND_INDEX] = soundPool.load(getActivity(), R.raw.drum_loop, 1);
+        soundIds[BOARD_UP_SOUND_INDEX] = soundPool.load(getActivity(), R.raw.yooo, 1);
     }
 
     /**
@@ -470,12 +476,20 @@ public class MainFragment extends Fragment {
         mConversationArrayAdapter.add(BOARD_ACTION_TAG + ":  " + msg);
         switch (msg) {
             case "wheelmove":
-                //streamIds[0] = soundPool.play(soundIds[0], 1.0f, 1.0f, 1, -1, 1.0f);
-                playMusic(0, R.raw.the_night_out);
+                soundPool.stop(streamIds[DRUM_SOUND_INDEX]);
+                streamIds[DRUM_SOUND_INDEX] = soundPool.play(soundIds[DRUM_SOUND_INDEX], 1.0f, 1.0f, 1, -1, 1.0f);
+                //playMusic(0, R.raw.the_night_out);
                 break;
             case "wheelstop":
-                //soundPool.stop(streamIds[0]);
-                stopMusic(0);
+                soundPool.stop(streamIds[DRUM_SOUND_INDEX]);
+                //stopMusic(0);
+                break;
+            case "boardup":
+                streamIds[0] = soundPool.play(soundIds[BOARD_UP_SOUND_INDEX], 1.0f, 1.0f, 1, 0, 1.0f);
+                //playMusic(0, R.raw.the_night_out);
+                break;
+            case "boarddown":
+                //stopMusic(0);
                 break;
         }
     }
