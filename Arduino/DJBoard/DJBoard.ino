@@ -1,8 +1,13 @@
 #include <SoftwareSerial.h>
+#define TO_DEG(x) (x * 57.2957795131)  // *180/pi
+
 const char playWheelMusic[] = "wheelmove\0";
 const char stopWheelMusic[] = "wheelstop\0";
 const char playBoardUpMusic[] = "boardup\0";
 const char stopBoardUpMusic[] = "boarddown\0";
+const char turnRight[] = "turnright\0";
+const char turnLeft[] = "turnleft\0";
+const char changeDrt[] = "stopRolling\0";
 
 int rx = 10;
 int tx = 11;
@@ -16,8 +21,12 @@ SoftwareSerial Bluetooth(rx,tx);//定義PIN10及PIN11分別為RX及TX腳位
 
 // Euler angles
 float yaw;
-float pitch;
-float roll;
+float pitch; // up down >= |+-170|
+float roll; // left right // 35
+
+float previousRoll;
+int previousDrt=1;
+int count=0, s=0, r=0;
 
 void setup()
 {
@@ -30,6 +39,7 @@ void setup()
   time = millis();
   isBlack = false;
   isMoving = false;
+  previousRoll=roll;
 }
 
 void loop()
@@ -37,7 +47,13 @@ void loop()
   razorLoop();
   checkWheelMove();
   checkBoardUp();
-
+  
+  s++;
+  if(s==3800){
+    rolling();
+    s=0;
+  }
+  //delay(100);
 }
 
 void checkWheelMove(){
@@ -64,7 +80,7 @@ void checkWheelMove(){
     isBlack = true;
   }
   if(millis()-time>1000 && isMoving){
-      Serial.println("Board Stopped");
+     // Serial.println("Board Stopped");
       Bluetooth.write(stopWheelMusic);
       isMoving = false;
   }  IRVal=digitalRead(iRSensorPin);
@@ -74,11 +90,11 @@ void checkWheelMove(){
   if(IRVal==HIGH && isBlack){  //first seen white
     digitalWrite(led,HIGH);
     duration = millis()-time;
-    Serial.println(duration);
+  //  Serial.println(duration);
     time = millis();
     isBlack = false;
     if(!isMoving){
-      Serial.println("Board Move");
+   //   Serial.println("Board Move");
       Bluetooth.write(playWheelMusic);
       isMoving = true;
     }
@@ -90,7 +106,7 @@ void checkWheelMove(){
     isBlack = true;
   }
   if(millis()-time>1000 && isMoving){
-      Serial.println("Board Stopped");
+   //   Serial.println("Board Stopped");
       Bluetooth.write(stopWheelMusic);
       isMoving = false;
   }
@@ -106,6 +122,63 @@ void checkBoardUp(){
 }
 
 
+void rolling(){
+  //Serial.println("rolling");
+ /* Serial.print("roll:");
+  Serial.print(TO_DEG(roll));
+  Serial.print(", previousRoll:");
+  Serial.print(TO_DEG(previousRoll));
+*/
+  float diff=roll-previousRoll;
+/*
+  Serial.print(", diff:");
+  Serial.println(TO_DEG(diff));
+*/
+  int direction;
+  
+  if(TO_DEG(diff) > 13){
+    direction=1; 
+   
+  }
+  else if(TO_DEG(diff) < -13){
+    direction=-1;
+   
+  }
+ 
+  if(previousDrt==direction){
+    count+=2;
+    if(count>4){ 
+      if(direction ==1 ){
+        //Serial.println("right"); 
+        if(r==0){
+          Serial.println("right"); 
+          Bluetooth.write(turnRight);
+          r=1;
+        }
+      }
+      else if(direction ==-1 ){
+        //Serial.println("left");
+        if(r==0){
+          Serial.println("left");
+          Bluetooth.write(turnLeft);
+          r=1;
+        }
+      }
+    } //play music
+  }
+  else{
+    previousDrt=direction;
+    count=count-1;
+    //Serial.println("stop");
+    if(r==1){
+      Serial.println("stop");
+      Bluetooth.write(changeDrt);
+      r=0;
+    }
+  }
+  
+  previousRoll=roll;
+}
 
 
 
@@ -457,7 +530,6 @@ const float magn_ellipsoid_transform[3][3] = {{0.902, -0.00354, 0.000636}, {-0.0
 #define STATUS_LED_PIN 13  // Pin number of status LED
 #define GRAVITY 256.0f // "1G reference" used for DCM filter and accelerometer calibration
 #define TO_RAD(x) (x * 0.01745329252)  // *pi/180
-#define TO_DEG(x) (x * 57.2957795131)  // *180/pi
 
 // Sensor variables
 float accel[3];  // Actually stores the NEGATED acceleration (equals gravity, if board not moving).
@@ -652,9 +724,9 @@ void razorLoop()
         id[1] = readChar();
         
         // Reply with synch message
-        Serial.print("#SYNCH");
-        Serial.write(id, 2);
-        Serial.println();
+    //    Serial.print("#SYNCH");
+     //   Serial.write(id, 2);
+      //  Serial.println();
       }
       else if (command == 'o') // Set _o_utput mode
       {
@@ -712,10 +784,10 @@ void razorLoop()
           else if (error_param == '1') output_errors = true;
           else if (error_param == 'c') // get error count
           {
-            Serial.print("#AMG-ERR:");
-            Serial.print(num_accel_errors); Serial.print(",");
-            Serial.print(num_magn_errors); Serial.print(",");
-            Serial.println(num_gyro_errors);
+          //  Serial.print("#AMG-ERR:");
+          //  Serial.print(num_accel_errors); Serial.print(",");
+         //   Serial.print(num_magn_errors); Serial.print(",");
+       //     Serial.println(num_gyro_errors);
           }
         }
       }
