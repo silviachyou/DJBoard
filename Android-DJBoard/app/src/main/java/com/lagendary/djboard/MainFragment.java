@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -168,9 +169,17 @@ public class MainFragment extends Fragment {
     }
 
     private void initSoundPool() {
-        soundPool = new SoundPool.Builder()
-                        .setMaxStreams(10)
-                        .build();
+        soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 1);
+        soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+
+            @Override
+            public void onLoadComplete(SoundPool soundPool, int sampleId,
+                                       int arg2) {
+                Log.d(TAG, "music " + sampleId + " load complete");
+                soundPool.play(sampleId, 1.0f, 1.0f, 1, 0, 1.0f);
+            }
+
+        });
         soundIds[0] = soundPool.load(getActivity(), R.raw.the_night_out, 1);
     }
 
