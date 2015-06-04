@@ -28,6 +28,7 @@ float roll; // left right // 35
 float previousRoll;
 int previousDrt=1;
 int count=0, s=0, r=0;
+unsigned long rolltime=0;
 
 
 /***** FLAGS ******/
@@ -48,6 +49,7 @@ void setup()
   isBlack = false;
   isMoving = false;
   previousRoll=roll;
+  rolltime=millis();
   isBoardUp = false;
 }
 
@@ -57,12 +59,10 @@ void loop()
   checkWheelMove();
   checkBoardUp();
   
-  s++;
-  if(s==3800){
+  if(millis()-rolltime > 100){
     rolling();
-    s=0;
+    rolltime=millis();
   }
-  //delay(100);
 }
 
 void checkWheelMove(){
