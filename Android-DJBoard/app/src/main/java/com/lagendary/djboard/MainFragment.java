@@ -502,7 +502,7 @@ public class MainFragment extends Fragment {
             case "knockFront":
                 soundPlaying[BASE_SOUND_ALIEN_INDEX] = !soundPlaying[BASE_SOUND_ALIEN_INDEX];
                 if(soundPlaying[BASE_SOUND_ALIEN_INDEX]) {
-                    streamIds[BASE_SOUND_ALIEN_INDEX] = soundPool.play(soundIds[BOARD_UP_SOUND_INDEX], 1.0f, 1.0f, 1, -1, 1.0f);
+                    streamIds[BASE_SOUND_ALIEN_INDEX] = soundPool.play(soundIds[BASE_SOUND_ALIEN_INDEX], 1.0f, 1.0f, 1, -1, 1.0f);
                 }else{
                     soundPool.stop(streamIds[BASE_SOUND_ALIEN_INDEX]);
                 }
