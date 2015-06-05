@@ -14,12 +14,12 @@ const char knockMid[] = "knockMid\n";
 const char knockBack[] = "knockBack\n";
 
 const char playUltraSoundMusic_init[] = "ultrasound:";
-const char playUltraSoundMusic_init_add_num[] = "ultrasound:   0.00\n";
-const char stopUltraSoundMusic[] = "stop_ultrasound";
+const char playUltraSoundMusic_init_add_num[] = "ultrasound:    0.00\n";
+const char stopUltraSoundMusic[] = "stop_ultrasound\n";
 
 #define TO_RAD(x) (x * 0.01745329252)  // *pi/180
 #define TO_DEG(x) (x * 57.2957795131)  // *180/pi
-#define Ultra_Sound_limit 100
+#define Ultra_Sound_limit 80
 
 /***** DEFINE PIN *******/
 int rx = 10;
@@ -71,7 +71,8 @@ bool isControlUltra;
 void setup()
 {
   razorSetup();
-  
+  Serial.begin(9600);
+
   Bluetooth.begin(115200);
   pinMode(led,OUTPUT);
   pinMode(iRSensorPin,INPUT);
@@ -97,7 +98,7 @@ void loop()
 
   checkKnock();
 
-  //checkUltraSound();
+  checkUltraSound();
   if(millis()-rolltime > 100){
     rolling();
     rolltime=millis();
@@ -190,10 +191,11 @@ void checkKnock(){
 
 void checkUltraSound(){
   Ultra_Sound_cmMsec = ultrasonic.convert( ultrasonic.timing() , Ultrasonic::CM ); 
+//  Serial.println(Ultra_Sound_cmMsec); 
   if( Ultra_Sound_cmMsec < Ultra_Sound_limit && !isControlUltra ) { // first time hand in
-      Serial.print("Hand Start!!");
+     // Serial.print("Hand Start!!");
       Ultra_Sound_cmMsec_Init = Ultra_Sound_cmMsec;
-      Serial.println(Ultra_Sound_cmMsec_Init);
+      Serial.print(playUltraSoundMusic_init_add_num);
       Bluetooth.write(playUltraSoundMusic_init_add_num);
       isControlUltra = true;    
   }
@@ -204,13 +206,15 @@ void checkUltraSound(){
     char playUltraSoundMusic[80];
     strcpy(playUltraSoundMusic,playUltraSoundMusic_init);
     char s[80];
+    char line[4]="\n";
     dtostrf(diff_hand_control,8, 2, s);
     strcat(playUltraSoundMusic,s);  
-    Serial.println(playUltraSoundMusic);    
+    strcat(playUltraSoundMusic,line); 
+    Serial.print(playUltraSoundMusic); 
     Bluetooth.write(playUltraSoundMusic);     
   }
   if(Ultra_Sound_cmMsec > Ultra_Sound_limit && isControlUltra ) { // stop 
-    Serial.println("Board Stopped");
+    Serial.print(stopUltraSoundMusic);
     Bluetooth.write(stopUltraSoundMusic);
     isControlUltra = false;
   }
