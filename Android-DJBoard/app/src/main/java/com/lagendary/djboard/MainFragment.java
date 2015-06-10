@@ -533,7 +533,7 @@ public class MainFragment extends Fragment {
                 toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_PIANO_INDEX, 0.5f);
                 break;
             case "knockMid":
-                toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_CHASER_INDEX, 0.3f);
+                toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_CHASER_INDEX, 0.5f);
                 break;
             case "knockBack":
                 toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_BEATBOX_INDEX, 1.0f);
