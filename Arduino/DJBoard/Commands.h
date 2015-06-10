@@ -12,5 +12,4 @@ const char knockMid[] = "knockMid\n";
 const char knockBack[] = "knockBack\n";
 
 const char playUltraSoundMusic_init[] = "ultrasound:";
-const char playUltraSoundMusic_init_add_num[] = "ultrasound:    0.00\n";
 const char stopUltraSoundMusic[] = "stop_ultrasound\n";

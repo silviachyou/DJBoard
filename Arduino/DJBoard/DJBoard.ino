@@ -1,27 +1,21 @@
 #include <SoftwareSerial.h>
-#include <Ultrasonic.h>
-#include <stdio.h>
 #include "Commands.h"
 
 #define TO_RAD(x) (x * 0.01745329252)  // *pi/180
 #define TO_DEG(x) (x * 57.2957795131)  // *180/pi
-#define Ultra_Sound_limit 80
 
 /***** DEFINE PIN *******/
 int rx = 10;
 int tx = 11;
 int led = 13;
 int iRSensorPin = 3;
-
 int knockSensor1 = 7;
 int knockSensor2 = 8;
 int knockSensor3 = 9;
-
 int TRIGGER_PIN = 5;
 int ECHO_PIN = 6;
 
 SoftwareSerial Bluetooth(rx,tx);//定義PIN10及PIN11分別為RX及TX腳位
-Ultrasonic ultrasonic(TRIGGER_PIN, ECHO_PIN);
 
 int IRVal;
 
@@ -30,12 +24,10 @@ float yaw;
 float pitch; // up down >= |+-170|
 float roll; // left right // 35
 
-
 void setup()
 {
   razorSetup();
   Serial.begin(9600);
-
   Bluetooth.begin(115200);
   pinMode(led,OUTPUT);
   pinMode(iRSensorPin,INPUT);
@@ -48,19 +40,10 @@ void loop()
   razorLoop();
   checkWheelMove();
   checkBoardUp();
-
   checkKnock();
-
   checkUltraSound();
   checkRolling();
 }
-
-
-
-
-
-
-
 
 
 /***************************************************************************************************************
