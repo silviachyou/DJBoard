@@ -9,9 +9,9 @@ void checkKnock(){
    int sensorReading1 = 0;
    int sensorReading2 = 0;
    int sensorReading3 = 0;
-   sensorReading1 = analogReadRead(knockSensor1);
-   sensorReading2 = analogReadRead(knockSensor2);
-   sensorReading3 = analogReadRead(knockSensor3);
+   sensorReading1 = analogRead(knockSensor1);
+   sensorReading2 = analogRead(knockSensor2);
+   sensorReading3 = analogRead(knockSensor3);
 
    if(millis() - knocktime > 1000) {
      if(knockStatus1 != sensorReading1) {
