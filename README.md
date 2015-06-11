@@ -1,7 +1,7 @@
 # DJBoard
 Skateboard DJ
 
-pins: 
+**pins** 
 
 -digital: 
 	3: IRsensor			 	S
