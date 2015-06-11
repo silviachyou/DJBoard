@@ -36,7 +36,7 @@ void checkUltraSound(){
         dtostrf(diff_hand_control,8, 2, s);
         strcat(playUltraSoundMusic,s);  
         strcat(playUltraSoundMusic,line); 
-        Serial.print(playUltraSoundMusic); 
+      //  Serial.print(playUltraSoundMusic); 
         Bluetooth.write(playUltraSoundMusic);     
       }
     }
