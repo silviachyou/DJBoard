@@ -3,8 +3,8 @@
 
 #pins#
 
-**- digital** <br />
-+ 3: IRsensor			 	S <br />
+###digital###
++ 3: IRsensor       S <br />
 + 5: HC-SR04				TRIG <br />
 + 6: HC-SR04				ECHO <br />
 + 7: knockSensor1 // not yet <br />
@@ -13,6 +13,6 @@
 + 10: HC-06				rxd <br />
 + 11: HC-06				txd <br />
 
-**- analog** <br />
+###analog###
 + 4: 9DOF Sensor Stick	SDA <br />
 + 5: 9DOF Sensor Stick	SCL <br />
