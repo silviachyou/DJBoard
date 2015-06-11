@@ -108,7 +108,7 @@ public class MainFragment extends Fragment {
 
     private SoundPool soundPool;
 
-    private static final int[] SOUND_RES_IDS = {R.raw.drum_loop, R.raw.yooo, R.raw.piano, R.raw.chaser, R.raw.beatbox};
+    private static final int[] SOUND_RES_IDS = {R.raw.drum_loop, R.raw.yooo, R.raw.piano, R.raw.chaser, R.raw.beatbox, R.raw.saw_wave};
 
     private static final int SOUND_POOL_NO = SOUND_RES_IDS.length;
 
@@ -117,6 +117,8 @@ public class MainFragment extends Fragment {
     private static final int BASE_SOUND_PIANO_INDEX = 2;
     private static final int BASE_SOUND_CHASER_INDEX = 3;
     private static final int BASE_SOUND_BEATBOX_INDEX = 4;
+
+    private static final int BASE_SOUND_SAW_WAVE_INDEX = 5;
 
     private int[] soundIds = new int[SOUND_POOL_NO];
     private int[] streamIds = new int[SOUND_POOL_NO];
@@ -604,12 +606,20 @@ public class MainFragment extends Fragment {
                 break;
             case "stop_ultrasound":
                 ultraSonicTextView.setText(getString(R.string.ultrasonic_stopped));
+                toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_SAW_WAVE_INDEX, 1.0f);
                 break;
             default:
                 if(msg.startsWith("ultrasound:")) {
                     String no = msg.substring(11).trim();
                     double noDouble = Double.parseDouble(no);
                     ultraSonicTextView.setText(getString(R.string.ultrasonic_distance) + ": " + noDouble + "cm");
+
+                    if(!soundPlaying[BASE_SOUND_SAW_WAVE_INDEX]) {
+                        toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_SAW_WAVE_INDEX, 1.0f);
+                    }
+                    float rate = 1.0f + (float) ((noDouble - 40.0) / 40.0);
+                    
+                    soundPool.setRate(streamIds[BASE_SOUND_SAW_WAVE_INDEX], rate);
                 }else if(msg.startsWith("v= ")) {
                     boardVelocity = Double.parseDouble(msg.substring(3).trim());
                     notifyBoardInfoUpdated();
