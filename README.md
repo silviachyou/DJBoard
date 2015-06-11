@@ -1,9 +1,9 @@
 # DJBoard
-Skateboard DJ
 
-**pins** 
 
-- digital: 
+#pins#
+
+**- digital**
 	3: IRsensor			 	S
 	5: HC-SR04				TRIG 
 	6: HC-SR04				ECHO
@@ -13,6 +13,6 @@ Skateboard DJ
 	10: HC-06				rxd
 	11: HC-06				txd
 
-- analog:
+**- analog**
 	4: 9DOF Sensor Stick	SDA
 	5: 9DOF Sensor Stick	SCL
