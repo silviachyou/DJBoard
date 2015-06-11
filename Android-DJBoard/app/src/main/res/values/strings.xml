@@ -41,4 +41,7 @@
 
     <string name="ultrasonic_stopped">Ultrasonic stopped</string>
     <string name="ultrasonic_distance">Ultrasonic Distance</string>
+
+    <string name="board_info_distance">Distance</string>
+    <string name="board_info_velocity">Velocity</string>
 </resources>

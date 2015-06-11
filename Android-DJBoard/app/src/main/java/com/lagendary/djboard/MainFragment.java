@@ -77,6 +77,7 @@ public class MainFragment extends Fragment {
     private TextView knockFrontTextView;
     private TextView knockMidTextView;
     private TextView knockBackTextView;
+    private TextView boardInfoTextView;
 
     private StringBuilder msgBuilder = new StringBuilder();
 
@@ -120,10 +121,14 @@ public class MainFragment extends Fragment {
     private int[] soundIds = new int[SOUND_POOL_NO];
     private int[] streamIds = new int[SOUND_POOL_NO];
 
+    private double boardVelocity = 0.0;
+    private int boardDistance = 0;
+
 
     private MediaPlayer[] players = new MediaPlayer[SOUND_POOL_NO];
 
     private boolean[] soundPlaying = new boolean[SOUND_POOL_NO]; // sparse, depends on if is toggled by the developer
+
 
 
     @Override
@@ -195,6 +200,7 @@ public class MainFragment extends Fragment {
         statusDisplayLayout = view.findViewById(R.id.status_display_layout);
         wheelProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         wheelMovingTextView = (TextView) view.findViewById(R.id.wheel_moving_text);
+        boardInfoTextView = (TextView) view.findViewById(R.id.board_info_text);
         boardTurningTextView = (TextView) view.findViewById(R.id.board_turning_text);
         ultraSonicTextView = (TextView) view.findViewById(R.id.ultrasonic_text);
         knockFrontTextView = (TextView) view.findViewById(R.id.knock_state_front);
@@ -210,6 +216,13 @@ public class MainFragment extends Fragment {
         knockMidTextView.setBackgroundColor(getResources().getColor(R.color.red_100));
         ultraSonicTextView.setText("");
         boardTurningTextView.setText("");
+        boardDistance = 0;
+        boardVelocity = 0.0;
+        notifyBoardInfoUpdated();
+    }
+
+    private void notifyBoardInfoUpdated() {
+        boardInfoTextView.setText(getString(R.string.board_info_distance) + ": " + boardDistance + "  " +  getString(R.string.board_info_velocity) + ": " + boardVelocity);
     }
 
     private void setWheelMoving(boolean moving){
@@ -597,6 +610,12 @@ public class MainFragment extends Fragment {
                     String no = msg.substring(11).trim();
                     double noDouble = Double.parseDouble(no);
                     ultraSonicTextView.setText(getString(R.string.ultrasonic_distance) + ": " + noDouble + "cm");
+                }else if(msg.startsWith("v= ")) {
+                    boardVelocity = Double.parseDouble(msg.substring(3).trim());
+                    notifyBoardInfoUpdated();
+                }else if(msg.startsWith("d= ")) {
+                    boardDistance = Integer.parseInt(msg.substring(3).trim());
+                    notifyBoardInfoUpdated();
                 }
                 break;
         }
