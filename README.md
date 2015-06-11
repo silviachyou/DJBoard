@@ -4,7 +4,7 @@
 #pins#
 
 **- digital**
-	3: IRsensor			 	S
+	3: IRsensor			 	S <br />
 	5: HC-SR04				TRIG 
 	6: HC-SR04				ECHO
 	7: knockSensor1 // not yet
