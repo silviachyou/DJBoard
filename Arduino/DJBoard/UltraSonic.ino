@@ -1,12 +1,13 @@
 #include <Ultrasonic.h>
 #include <stdio.h>
-#define Ultra_Sound_limit 140
-#define CountLimit 5
-#define delayTime 100
+#define Ultra_Sound_limit 90
+#define CountLimit 10
+#define delayTime 120
 
 Ultrasonic ultrasonic(TRIGGER_PIN, ECHO_PIN);
 
 bool isControlUltra = false;
+bool isStart = false;
 int changeSonicCount = 0;
 unsigned long soundtime = 0;
 float Ultra_Sound_cmMsec = ultrasonic.convert( ultrasonic.timing() , Ultrasonic::CM );
@@ -27,6 +28,7 @@ void checkUltraSound(){
     else if( Ultra_Sound_cmMsec < Ultra_Sound_limit && isControlUltra ) { // control height
       changeSonicCount ++;
       if( changeSonicCount > CountLimit ){
+        isStart = true;
         float diff_hand_control = Ultra_Sound_cmMsec_Init;
         diff_hand_control = Ultra_Sound_cmMsec - diff_hand_control;
         char playUltraSoundMusic[80];
@@ -40,11 +42,12 @@ void checkUltraSound(){
         Bluetooth.write(playUltraSoundMusic);     
       }
     }
-    if(Ultra_Sound_cmMsec > Ultra_Sound_limit && isControlUltra ) { // stop 
+    if(Ultra_Sound_cmMsec > Ultra_Sound_limit && isControlUltra && isStart) { // stop 
       changeSonicCount = 0;
       Serial.print(stopUltraSoundMusic);
       Bluetooth.write(stopUltraSoundMusic);
       isControlUltra = false;
+      isStart = false;
     }
   }
 }
