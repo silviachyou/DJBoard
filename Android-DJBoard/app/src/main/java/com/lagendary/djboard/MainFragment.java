@@ -593,7 +593,7 @@ public class MainFragment extends Fragment {
                 break;
             case "knockBack":
                 boolean backStarted = toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_BEATBOX_INDEX, 1.0f);
-                knockFrontTextView.setBackgroundColor(getResources().getColor(backStarted ? R.color.red_500 : R.color.red_100));
+                knockBackTextView.setBackgroundColor(getResources().getColor(backStarted ? R.color.red_500 : R.color.red_100));
                 break;
             case "turnright":
                 boardTurningTextView.setText(getString(R.string.board_turning_turn_right));
