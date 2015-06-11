@@ -22,6 +22,12 @@
         app:showAsAction="ifRoom"
         android:title="@string/secure_connect"/>
 
+
+    <item
+        android:id="@+id/toggle_bluetooth_log"
+        app:showAsAction="ifRoom"
+        android:title="@string/toggle_bluetooth_log"/>
+
     <item
         android:id="@+id/insecure_connect_scan"
         app:showAsAction="never"
