@@ -3,7 +3,7 @@ bool isMoving = false;
 const int wheelLen = 15; //cm
 double v = 0;
 int dis = 0;
-const char eol[3]="\0";
+const char eol[3]="\n";
 
 unsigned long time, duration;
 
