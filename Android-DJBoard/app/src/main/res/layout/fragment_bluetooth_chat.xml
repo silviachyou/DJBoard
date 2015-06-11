@@ -14,11 +14,90 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/status_display_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_marginTop="24dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+        <TextView
+            android:id="@+id/wheel_moving_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wheel_moving_state_moving"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/progressBar"
+            android:layout_margin="16dp"/>
+        <TextView
+            android:id="@+id/board_turning_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/board_turning_turn_left"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/wheel_moving_text" />
+
+        <TextView
+            android:id="@+id/ultrasonic_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/board_turning_text" />
+
+        <TextView
+            android:id="@+id/knock_state_mid"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:text="2"
+            android:textSize="24dp"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:background="@color/red_100"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/ultrasonic_text"
+            android:layout_margin="8dp"
+            />
+        <TextView
+            android:id="@+id/knock_state_front"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:text="1"
+            android:textSize="24dp"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:background="@color/red_100"
+            android:layout_toLeftOf="@id/knock_state_mid"
+            android:layout_alignTop="@id/knock_state_mid"
+            android:layout_alignBottom="@id/knock_state_mid"
+            />
+        <TextView
+            android:id="@+id/knock_state_back"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:text="3"
+            android:textSize="24dp"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:background="@color/red_100"
+            android:layout_toRightOf="@id/knock_state_mid"
+            android:layout_alignTop="@id/knock_state_mid"
+            android:layout_alignBottom="@id/knock_state_mid"
+            />
+
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/in"
@@ -26,12 +105,14 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:stackFromBottom="true"
-        android:transcriptMode="alwaysScroll" />
+        android:transcriptMode="alwaysScroll"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <EditText
             android:id="@+id/edit_text_out"
@@ -47,4 +128,5 @@
             android:text="@string/send" />
     </LinearLayout>
 
-</LinearLayout>
+
+</RelativeLayout>

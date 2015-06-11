@@ -42,6 +42,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,6 +67,16 @@ public class MainFragment extends Fragment {
     private ListView mConversationView;
     private EditText mOutEditText;
     private Button mSendButton;
+
+    //status_display_layout views
+    private View statusDisplayLayout;
+    private ProgressBar wheelProgressBar;
+    private TextView wheelMovingTextView;
+    private TextView boardTurningTextView;
+    private TextView ultraSonicTextView;
+    private TextView knockFrontTextView;
+    private TextView knockMidTextView;
+    private TextView knockBackTextView;
 
     private StringBuilder msgBuilder = new StringBuilder();
 
@@ -181,6 +192,29 @@ public class MainFragment extends Fragment {
         mConversationView = (ListView) view.findViewById(R.id.in);
         mOutEditText = (EditText) view.findViewById(R.id.edit_text_out);
         mSendButton = (Button) view.findViewById(R.id.button_send);
+        statusDisplayLayout = view.findViewById(R.id.status_display_layout);
+        wheelProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        wheelMovingTextView = (TextView) view.findViewById(R.id.wheel_moving_text);
+        boardTurningTextView = (TextView) view.findViewById(R.id.board_turning_text);
+        ultraSonicTextView = (TextView) view.findViewById(R.id.ultrasonic_text);
+        knockFrontTextView = (TextView) view.findViewById(R.id.knock_state_front);
+        knockMidTextView = (TextView) view.findViewById(R.id.knock_state_mid);
+        knockBackTextView = (TextView) view.findViewById(R.id.knock_state_back);
+        resetViews();
+    }
+
+    private void resetViews() {
+        setWheelMoving(false);
+        knockBackTextView.setBackgroundColor(getResources().getColor(R.color.red_100));
+        knockFrontTextView.setBackgroundColor(getResources().getColor(R.color.red_100));
+        knockMidTextView.setBackgroundColor(getResources().getColor(R.color.red_100));
+        ultraSonicTextView.setText("");
+        boardTurningTextView.setText("");
+    }
+
+    private void setWheelMoving(boolean moving){
+        wheelMovingTextView.setText(getResources().getString(moving ? R.string.wheel_moving_state_moving : R.string.wheel_moving_state_stopped));
+        wheelProgressBar.setVisibility(moving ? View.VISIBLE : View.INVISIBLE);
     }
 
     private void initSoundPool() {
@@ -345,6 +379,7 @@ public class MainFragment extends Fragment {
                         case BluetoothService.STATE_LISTEN:
                         case BluetoothService.STATE_NONE:
                             setStatus(R.string.title_not_connected);
+                            resetViews();
                             break;
                     }
                     break;
@@ -449,18 +484,22 @@ public class MainFragment extends Fragment {
                 ensureDiscoverable();
                 return true;
             }
+            case R.id.toggle_bluetooth_log:
+                mConversationView.setVisibility(mConversationView.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                return true;
         }
         return false;
     }
 
 
-    public void toggleLoopMusicWithNoFromSoundPool(int musicPlayerNo, float volume){
+    public boolean toggleLoopMusicWithNoFromSoundPool(int musicPlayerNo, float volume){
         soundPlaying[musicPlayerNo] = !soundPlaying[musicPlayerNo];
         if(soundPlaying[musicPlayerNo]) {
             streamIds[musicPlayerNo] = soundPool.play(soundIds[musicPlayerNo], volume, volume, 1, -1, 1.0f);
         }else{
             soundPool.stop(streamIds[musicPlayerNo]);
         }
+        return soundPlaying[musicPlayerNo];
     }
 
     public void toggleLoopMusicWithNoWithVolume(int musicPlayerNo, float volume){
@@ -506,8 +545,6 @@ public class MainFragment extends Fragment {
                 msgBuilder = new StringBuilder();
             }
         }
-
-
     }
 
     private void actionForMessage(String msg){
@@ -516,10 +553,12 @@ public class MainFragment extends Fragment {
             case "wheelmove":
                 soundPool.stop(streamIds[DRUM_SOUND_INDEX]);
                 streamIds[DRUM_SOUND_INDEX] = soundPool.play(soundIds[DRUM_SOUND_INDEX], 1.0f, 1.0f, 1, -1, 1.0f);
+                setWheelMoving(true);
                 //playMusic(0, R.raw.the_night_out);
                 break;
             case "wheelstop":
                 soundPool.stop(streamIds[DRUM_SOUND_INDEX]);
+                setWheelMoving(false);
                 //stopMusic(0);
                 break;
             case "boardup":
@@ -530,13 +569,35 @@ public class MainFragment extends Fragment {
                 //stopMusic(0);
                 break;
             case "knockFront":
-                toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_PIANO_INDEX, 0.5f);
+                boolean frontStarted = toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_PIANO_INDEX, 0.5f);
+                knockFrontTextView.setBackgroundColor(getResources().getColor(frontStarted ? R.color.red_500 : R.color.red_100));
                 break;
             case "knockMid":
-                toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_CHASER_INDEX, 0.5f);
+                boolean middleStarted = toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_CHASER_INDEX, 0.5f);
+                knockMidTextView.setBackgroundColor(getResources().getColor(middleStarted ? R.color.red_500 : R.color.red_100));
                 break;
             case "knockBack":
-                toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_BEATBOX_INDEX, 1.0f);
+                boolean backStarted = toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_BEATBOX_INDEX, 1.0f);
+                knockFrontTextView.setBackgroundColor(getResources().getColor(backStarted ? R.color.red_500 : R.color.red_100));
+                break;
+            case "turnright":
+                boardTurningTextView.setText(getString(R.string.board_turning_turn_right));
+                break;
+            case "turnleft":
+                boardTurningTextView.setText(getString(R.string.board_turning_turn_left));
+                break;
+            case "stopRolling":
+                boardTurningTextView.setText("");
+                break;
+            case "stop_ultrasound":
+                ultraSonicTextView.setText(getString(R.string.ultrasonic_stopped));
+                break;
+            default:
+                if(msg.startsWith("ultrasound:")) {
+                    String no = msg.substring(11).trim();
+                    double noDouble = Double.parseDouble(no);
+                    ultraSonicTextView.setText(getString(R.string.ultrasonic_distance) + ": " + noDouble + "cm");
+                }
                 break;
         }
     }

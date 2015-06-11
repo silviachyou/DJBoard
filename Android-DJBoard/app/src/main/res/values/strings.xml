@@ -31,5 +31,14 @@
     <string name="sample_hide_log">Hide Log</string>
     <string name="intro_message">hello</string>
     <string name="show_music_player">Show Music Player</string>
+    <string name="toggle_bluetooth_log">Toggle Bluetooth Log</string>
 
+    <string name="wheel_moving_state_moving">Wheel Moving</string>
+    <string name="wheel_moving_state_stopped">Wheel Stopped</string>
+
+    <string name="board_turning_turn_left">Turning Left</string>
+    <string name="board_turning_turn_right">Turning Right</string>
+
+    <string name="ultrasonic_stopped">Ultrasonic stopped</string>
+    <string name="ultrasonic_distance">Ultrasonic Distance</string>
 </resources>
