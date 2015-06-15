@@ -46,16 +46,14 @@ void rolling(){
       if(direction ==1 ){
         //Serial.println("right"); 
         if(r==0){
-          Serial.println("right"); 
-          Bluetooth.write(turnRight);
+          printlogln(BT, turnRight);
           r=1;
         }
       }
       else if(direction ==-1 ){
         //Serial.println("left");
         if(r==0){
-          Serial.println("left");
-          Bluetooth.write(turnLeft);
+          printlogln(BT, turnLeft);
           r=1;
         }
       }
@@ -66,8 +64,7 @@ void rolling(){
     count=count-1;
     //Serial.println("stop");
     if(r==1){
-      Serial.println("stop");
-      Bluetooth.write(changeDrt);
+      printlogln(BT, changeDrt);
       r=0;
     }
   }

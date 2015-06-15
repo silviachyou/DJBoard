@@ -4,10 +4,12 @@
 #define TO_RAD(x) (x * 0.01745329252)  // *pi/180
 #define TO_DEG(x) (x * 57.2957795131)  // *180/pi
 
+const char BT = '$';
+const char DEV = '#';
+
 /***** DEFINE PIN *******/
 int rx = 10;
 int tx = 11;
-int led = 13;
 int iRSensorPin = 3;
 int knockSensor1 = A0;
 int knockSensor2 = A1;
@@ -17,7 +19,7 @@ int ECHO_PIN = 6;
 
 SoftwareSerial Bluetooth(rx,tx);//定義PIN10及PIN11分別為RX及TX腳位
 
-int IRVal;
+unsigned long globalTime;
 
 // Euler angles
 float yaw;
@@ -29,10 +31,10 @@ void setup()
   razorSetup();
   Serial.begin(9600);
   Bluetooth.begin(115200);
-  pinMode(led,OUTPUT);
   pinMode(iRSensorPin,INPUT);
   wheelMoveSetup();
   boardRollingSetup();
+  globalTime = millis();
 }
 
 void loop()
@@ -44,6 +46,25 @@ void loop()
   checkUltraSound();
   checkRolling();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /***************************************************************************************************************
