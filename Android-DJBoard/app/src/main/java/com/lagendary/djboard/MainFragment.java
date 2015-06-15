@@ -621,10 +621,14 @@ public class MainFragment extends Fragment {
                     
                     soundPool.setRate(streamIds[BASE_SOUND_SAW_WAVE_INDEX], rate);
                 }else if(msg.startsWith("v= ")) {
-                    boardVelocity = Double.parseDouble(msg.substring(3).trim());
-                    notifyBoardInfoUpdated();
+                    try {
+                        boardVelocity = Double.parseDouble(msg.substring(3).trim());
+                        notifyBoardInfoUpdated();
+                    } catch (NumberFormatException e){}
                 }else if(msg.startsWith("d= ")) {
-                    boardDistance = Integer.parseInt(msg.substring(3).trim());
+                    try {
+                        boardDistance = Integer.parseInt(msg.substring(3).trim());
+                    } catch (NumberFormatException e){}
                     notifyBoardInfoUpdated();
                 }
                 break;
