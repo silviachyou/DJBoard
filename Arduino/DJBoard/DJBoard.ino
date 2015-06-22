@@ -11,9 +11,9 @@ const char DEV = '#';
 int rx = 4;
 int tx = 7;
 int iRSensorPin = 3;
-int knockSensor1 = A0;
-int knockSensor2 = A1;
-int knockSensor3 = A2;
+int knockSensor1 = A1;//A0;
+int knockSensor2 = A2;//A1;
+int knockSensor3 = A0;//A2;
 int TRIGGER_PIN = 5;
 int ECHO_PIN = 6;
 
