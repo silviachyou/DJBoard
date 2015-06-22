@@ -16,10 +16,10 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/menu_toggle_log"
-          app:showAsAction="never"
-          android:title="@string/sample_show_log" />
     <item android:id="@+id/show_music_player"
         app:showAsAction="never"
         android:title="@string/show_music_player"/>
+    <item android:id="@+id/show_music_settings"
+        app:showAsAction="never"
+        android:title="@string/show_music_settings"/>
 </menu>

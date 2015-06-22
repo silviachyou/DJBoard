@@ -16,20 +16,18 @@
 
 package com.lagendary.djboard;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -106,31 +104,10 @@ public class MainFragment extends Fragment {
      */
     private BluetoothService mChatService = null;
 
-    private SoundPool soundPool;
-
-    private static final int[] SOUND_RES_IDS = {R.raw.drum_loop, R.raw.yooo, R.raw.piano, R.raw.chaser, R.raw.beatbox, R.raw.saw_wave};
-
-    private static final int SOUND_POOL_NO = SOUND_RES_IDS.length;
-
-    private static final int DRUM_SOUND_INDEX = 0;
-    private static final int BOARD_UP_SOUND_INDEX = 1;
-    private static final int BASE_SOUND_PIANO_INDEX = 2;
-    private static final int BASE_SOUND_CHASER_INDEX = 3;
-    private static final int BASE_SOUND_BEATBOX_INDEX = 4;
-
-    private static final int BASE_SOUND_SAW_WAVE_INDEX = 5;
-
-    private int[] soundIds = new int[SOUND_POOL_NO];
-    private int[] streamIds = new int[SOUND_POOL_NO];
-
     private double boardVelocity = 0.0;
     private int boardDistance = 0;
 
-
-    private MediaPlayer[] players = new MediaPlayer[SOUND_POOL_NO];
-
-    private boolean[] soundPlaying = new boolean[SOUND_POOL_NO]; // sparse, depends on if is toggled by the developer
-
+    private MusicPlayer mPlayer;
 
 
     @Override
@@ -146,7 +123,8 @@ public class MainFragment extends Fragment {
             Toast.makeText(activity, "Bluetooth is not available", Toast.LENGTH_LONG).show();
             activity.finish();
         }
-        initSoundPool();
+
+        mPlayer = new MusicPlayer(getActivity());
     }
 
 
@@ -232,24 +210,6 @@ public class MainFragment extends Fragment {
         wheelProgressBar.setVisibility(moving ? View.VISIBLE : View.INVISIBLE);
     }
 
-    private void initSoundPool() {
-        soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 1);
-        soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
-
-            @Override
-            public void onLoadComplete(SoundPool soundPool, int sampleId,
-                                       int arg2) {
-                Log.d(TAG, "music " + sampleId + " load complete");
-                //soundPool.play(sampleId, 1.0f, 1.0f, 1, 0, 1.0f);
-            }
-
-        });
-
-
-        for(int i = 0; i < SOUND_POOL_NO; i++) {
-            soundIds[i] = soundPool.load(getActivity(), SOUND_RES_IDS[i], 1);
-        }
-    }
 
     /**
      * Set up the UI and background operations for chat.
@@ -346,11 +306,11 @@ public class MainFragment extends Fragment {
      * @param resId a string resource ID
      */
     private void setStatus(int resId) {
-        FragmentActivity activity = getActivity();
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
         if (null == activity) {
             return;
         }
-        final ActionBar actionBar = activity.getActionBar();
+        final ActionBar actionBar = activity.getSupportActionBar();
         if (null == actionBar) {
             return;
         }
@@ -363,11 +323,11 @@ public class MainFragment extends Fragment {
      * @param subTitle status
      */
     private void setStatus(CharSequence subTitle) {
-        FragmentActivity activity = getActivity();
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
         if (null == activity) {
             return;
         }
-        final ActionBar actionBar = activity.getActionBar();
+        final ActionBar actionBar = activity.getSupportActionBar();
         if (null == actionBar) {
             return;
         }
@@ -476,7 +436,7 @@ public class MainFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.bluetooth_chat, menu);
+        inflater.inflate(R.menu.main_fragment, menu);
     }
 
     @Override
@@ -507,47 +467,6 @@ public class MainFragment extends Fragment {
     }
 
 
-    public boolean toggleLoopMusicWithNoFromSoundPool(int musicPlayerNo, float volume){
-        soundPlaying[musicPlayerNo] = !soundPlaying[musicPlayerNo];
-        if(soundPlaying[musicPlayerNo]) {
-            streamIds[musicPlayerNo] = soundPool.play(soundIds[musicPlayerNo], volume, volume, 1, -1, 1.0f);
-        }else{
-            soundPool.stop(streamIds[musicPlayerNo]);
-        }
-        return soundPlaying[musicPlayerNo];
-    }
-
-    public void toggleLoopMusicWithNoWithVolume(int musicPlayerNo, float volume){
-
-        soundPlaying[musicPlayerNo] = !soundPlaying[musicPlayerNo];
-        if(soundPlaying[musicPlayerNo]) {
-            playLoopMusicWithNo(musicPlayerNo, volume);
-        }else{
-            stopMusic(musicPlayerNo);
-        }
-
-    }
-
-    public void playLoopMusicWithNo(int musicPlayerNo, float volume){
-        playMusic(musicPlayerNo, SOUND_RES_IDS[musicPlayerNo], true, volume);
-    }
-
-    public void playMusic(int musicPlayerNo, int resId, boolean looping, float volume){
-        stopMusic(musicPlayerNo);
-        players[musicPlayerNo] = MediaPlayer.create(getActivity(), resId);
-        players[musicPlayerNo].setLooping(looping);
-        players[musicPlayerNo].setVolume(volume, volume);
-        players[musicPlayerNo].start();
-    }
-
-    public void stopMusic(int musicPlayerNo){
-        if (players[musicPlayerNo] != null) {
-            players[musicPlayerNo].release();
-            players[musicPlayerNo] = null;
-        }
-    }
-
-
     public void processReceivedMessage(String msg) {
         for(int i = 0 ;i < msg.length(); i++){
             char c = msg.charAt(i);
@@ -562,38 +481,29 @@ public class MainFragment extends Fragment {
         }
     }
 
-    private void actionForMessage(String msg){
+    private void actionForMessage(String msg) {
         mConversationArrayAdapter.add(BOARD_ACTION_TAG + ":  " + msg);
+        boolean result = mPlayer.actionForMessage(msg);
+
         switch (msg) {
             case "wheelmove":
-                soundPool.stop(streamIds[DRUM_SOUND_INDEX]);
-                streamIds[DRUM_SOUND_INDEX] = soundPool.play(soundIds[DRUM_SOUND_INDEX], 1.0f, 1.0f, 1, -1, 1.0f);
                 setWheelMoving(true);
-                //playMusic(0, R.raw.the_night_out);
                 break;
             case "wheelstop":
-                soundPool.stop(streamIds[DRUM_SOUND_INDEX]);
                 setWheelMoving(false);
-                //stopMusic(0);
                 break;
             case "boardup":
-                streamIds[BOARD_UP_SOUND_INDEX] = soundPool.play(soundIds[BOARD_UP_SOUND_INDEX], 1.0f, 1.0f, 1, 0, 1.0f);
-                //playMusic(0, R.raw.the_night_out);
                 break;
             case "boarddown":
-                //stopMusic(0);
                 break;
             case "knockFront":
-                boolean frontStarted = toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_PIANO_INDEX, 0.5f);
-                knockFrontTextView.setBackgroundColor(getResources().getColor(frontStarted ? R.color.red_500 : R.color.red_100));
+                knockFrontTextView.setBackgroundColor(getResources().getColor(result ? R.color.red_500 : R.color.red_100));
                 break;
             case "knockMid":
-                boolean middleStarted = toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_CHASER_INDEX, 0.5f);
-                knockMidTextView.setBackgroundColor(getResources().getColor(middleStarted ? R.color.red_500 : R.color.red_100));
+                knockMidTextView.setBackgroundColor(getResources().getColor(result ? R.color.red_500 : R.color.red_100));
                 break;
             case "knockBack":
-                boolean backStarted = toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_BEATBOX_INDEX, 1.0f);
-                knockBackTextView.setBackgroundColor(getResources().getColor(backStarted ? R.color.red_500 : R.color.red_100));
+                knockBackTextView.setBackgroundColor(getResources().getColor(result ? R.color.red_500 : R.color.red_100));
                 break;
             case "turnright":
                 boardTurningTextView.setText(getString(R.string.board_turning_turn_right));
@@ -606,20 +516,12 @@ public class MainFragment extends Fragment {
                 break;
             case "stop_ultrasound":
                 ultraSonicTextView.setText(getString(R.string.ultrasonic_stopped));
-                toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_SAW_WAVE_INDEX, 1.0f);
                 break;
             default:
                 if(msg.startsWith("ultrasound:")) {
                     String no = msg.substring(11).trim();
                     double noDouble = Double.parseDouble(no);
                     ultraSonicTextView.setText(getString(R.string.ultrasonic_distance) + ": " + noDouble + "cm");
-
-                    if(!soundPlaying[BASE_SOUND_SAW_WAVE_INDEX]) {
-                        toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_SAW_WAVE_INDEX, 1.0f);
-                    }
-                    float rate = 1.0f + (float) ((noDouble - 40.0) / 40.0);
-                    
-                    soundPool.setRate(streamIds[BASE_SOUND_SAW_WAVE_INDEX], rate);
                 }else if(msg.startsWith("v= ")) {
                     try {
                         boardVelocity = Double.parseDouble(msg.substring(3).trim());
@@ -634,5 +536,4 @@ public class MainFragment extends Fragment {
                 break;
         }
     }
-
 }
