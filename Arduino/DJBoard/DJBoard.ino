@@ -8,8 +8,8 @@ const char BT = '$';
 const char DEV = '#';
 
 /***** DEFINE PIN *******/
-int rx = 7;
-int tx = 4;
+int rx = 4;
+int tx = 7;
 int iRSensorPin = 3;
 int knockSensor1 = A0;
 int knockSensor2 = A1;
