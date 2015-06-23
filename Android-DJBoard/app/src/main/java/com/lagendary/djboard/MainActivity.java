@@ -21,7 +21,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ViewAnimator;
 
 import com.example.android.common.activities.SampleActivityBase;
 import com.example.android.common.logger.Log;
@@ -75,7 +74,7 @@ public class MainActivity extends SampleActivityBase {
                 startActivity(new Intent(this, MusicPlayerActivity.class));
                 return true;
             case R.id.show_music_settings:
-                startActivity(new Intent(this, MusicSettingsActivity.class));
+                startActivity(new Intent(this, MusicSimulationActivity.class));
                 return true;
         }
         return super.onOptionsItemSelected(item);

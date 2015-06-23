@@ -40,6 +40,69 @@ public class MusicPlayer {
 
     public MusicPlayer(Context context){
         this.context = context;
+        initSoundPool();
+    }
+
+    public void stopAllMusic() {
+        for(int i = 0; i < SOUND_POOL_NO; i++){
+            stopMusic(i);
+            soundPool.release();
+            initSoundPool();
+            soundPlaying[i] = false;
+        }
+    }
+
+    public boolean actionForMessage(String msg){
+        switch (msg) {
+            case "wheelmove":
+                soundPool.stop(streamIds[DRUM_SOUND_INDEX]);
+                streamIds[DRUM_SOUND_INDEX] = soundPool.play(soundIds[DRUM_SOUND_INDEX], 1.0f, 1.0f, 1, -1, 1.0f);
+                break;
+            case "wheelstop":
+                soundPool.stop(streamIds[DRUM_SOUND_INDEX]);
+                break;
+            case "boardup":
+                streamIds[BOARD_UP_SOUND_INDEX] = soundPool.play(soundIds[BOARD_UP_SOUND_INDEX], 1.0f, 1.0f, 1, 0, 1.0f);
+                //playMusic(0, R.raw.the_night_out);
+                break;
+            case "boarddown":
+                //stopMusic(0);
+                break;
+            case "knockFront":
+                boolean frontStarted = toggleLoopMusicWithNoWithVolume(BASE_SOUND_PIANO_INDEX, 0.5f);
+                return frontStarted;
+            case "knockMid":
+                boolean middleStarted = toggleLoopMusicWithNoWithVolume(BASE_SOUND_CHASER_INDEX, 0.5f);
+                return middleStarted;
+            case "knockBack":
+                boolean backStarted = toggleLoopMusicWithNoWithVolume(BASE_SOUND_BEATBOX_INDEX, 1.0f);
+                return backStarted;
+            case "turnright":
+                break;
+            case "turnleft":
+                break;
+            case "stopRolling":
+                break;
+            case "stop_ultrasound":
+                toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_SAW_WAVE_INDEX, 1.0f);
+                break;
+            default:
+                if(msg.startsWith("ultrasound:")) {
+                    String no = msg.substring(11).trim();
+                    double noDouble = Double.parseDouble(no);
+
+                    if(!soundPlaying[BASE_SOUND_SAW_WAVE_INDEX]) {
+                        toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_SAW_WAVE_INDEX, 1.0f);
+                    }
+                    float rate = 1.0f + (float) ((noDouble - 40.0) / 40.0);
+
+                    soundPool.setRate(streamIds[BASE_SOUND_SAW_WAVE_INDEX], rate);
+                }else if(msg.startsWith("v= ")) {
+                }else if(msg.startsWith("d= ")) {
+                }
+                break;
+        }
+        return true;
     }
 
     private void initSoundPool() {
@@ -72,7 +135,7 @@ public class MusicPlayer {
         return soundPlaying[musicPlayerNo];
     }
 
-    private void toggleLoopMusicWithNoWithVolume(int musicPlayerNo, float volume){
+    private boolean toggleLoopMusicWithNoWithVolume(int musicPlayerNo, float volume){
 
         soundPlaying[musicPlayerNo] = !soundPlaying[musicPlayerNo];
         if(soundPlaying[musicPlayerNo]) {
@@ -80,6 +143,7 @@ public class MusicPlayer {
         }else{
             stopMusic(musicPlayerNo);
         }
+        return soundPlaying[musicPlayerNo];
 
     }
 
@@ -102,57 +166,6 @@ public class MusicPlayer {
         }
     }
 
-    public boolean actionForMessage(String msg){
-        switch (msg) {
-            case "wheelmove":
-                soundPool.stop(streamIds[DRUM_SOUND_INDEX]);
-                streamIds[DRUM_SOUND_INDEX] = soundPool.play(soundIds[DRUM_SOUND_INDEX], 1.0f, 1.0f, 1, -1, 1.0f);
-                break;
-            case "wheelstop":
-                soundPool.stop(streamIds[DRUM_SOUND_INDEX]);
-                break;
-            case "boardup":
-                streamIds[BOARD_UP_SOUND_INDEX] = soundPool.play(soundIds[BOARD_UP_SOUND_INDEX], 1.0f, 1.0f, 1, 0, 1.0f);
-                //playMusic(0, R.raw.the_night_out);
-                break;
-            case "boarddown":
-                //stopMusic(0);
-                break;
-            case "knockFront":
-                boolean frontStarted = toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_PIANO_INDEX, 0.5f);
-                return frontStarted;
-            case "knockMid":
-                boolean middleStarted = toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_CHASER_INDEX, 0.5f);
-                return middleStarted;
-            case "knockBack":
-                boolean backStarted = toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_BEATBOX_INDEX, 1.0f);
-                return backStarted;
-            case "turnright":
-                break;
-            case "turnleft":
-                break;
-            case "stopRolling":
-                break;
-            case "stop_ultrasound":
-                toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_SAW_WAVE_INDEX, 1.0f);
-                break;
-            default:
-                if(msg.startsWith("ultrasound:")) {
-                    String no = msg.substring(11).trim();
-                    double noDouble = Double.parseDouble(no);
 
-                    if(!soundPlaying[BASE_SOUND_SAW_WAVE_INDEX]) {
-                        toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_SAW_WAVE_INDEX, 1.0f);
-                    }
-                    float rate = 1.0f + (float) ((noDouble - 40.0) / 40.0);
-
-                    soundPool.setRate(streamIds[BASE_SOUND_SAW_WAVE_INDEX], rate);
-                }else if(msg.startsWith("v= ")) {
-                }else if(msg.startsWith("d= ")) {
-                }
-                break;
-        }
-        return true;
-    }
 
 }

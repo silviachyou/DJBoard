@@ -20,6 +20,6 @@ public class WelcomeActivity extends AppCompatActivity{
     }
 
     public void startMusicSettings(View view) {
-        startActivity(new Intent(this, MusicSettingsActivity.class));
+        startActivity(new Intent(this, MusicSimulationActivity.class));
     }
 }

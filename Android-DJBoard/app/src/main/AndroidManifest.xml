@@ -22,7 +22,7 @@
 
         <activity android:name=".MainActivity" />
         <activity android:name=".MusicPlayerActivity"/>
-        <activity android:name=".MusicSettingsActivity"/>
+        <activity android:name=".MusicSimulationActivity"/>
         <activity android:name=".DeviceListActivity"/>
     </application>
 
