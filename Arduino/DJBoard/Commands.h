@@ -10,6 +10,7 @@ const char changeDrt[] = "stopRolling\n";
 const char knockFront[] = "knockFront\n";
 const char knockMid[] = "knockMid\n";
 const char knockBack[] = "knockBack\n";
+const char stickUp[] = "stickUp\n";
 
 const char playUltraSoundMusic_init[] = "ultrasound:";
 const char stopUltraSoundMusic[] = "stop_ultrasound\n";

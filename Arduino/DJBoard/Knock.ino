@@ -1,5 +1,5 @@
 
-unsigned long knocktime=0;
+unsigned long knocktime = 0, stickup_time = 0;
 
 bool knockStatus1 = 0;
 bool knockStatus2 = 0;
@@ -19,6 +19,12 @@ void checkKnock(){
    printlog(DEV, sensorReading2);
    printlog(DEV, " ");
    printlogln(DEV, sensorReading3);
+
+   if(millis() - stickup_time > 1000){
+      if(sensorReading1 > 190){
+        printlogln(BT, stickUp);
+      }
+   }
 
    if(millis() - knocktime > 500) {
 //            Serial.print("SENSOR1:");
