@@ -24,7 +24,7 @@ void checkKnock(){
 
    if(millis() - stickup_time > 1000){
      printlog(DEV, "sensor3: "); 
-     printlog(DEV, sensorReading3);
+     printlog(DEV, sensorReading3);   
       printlog(DEV, " , gyro: ");
       printlogln(DEV, gyro[2]);
 
@@ -39,22 +39,5 @@ void checkKnock(){
       
    }
 
-   // if(millis() - knocktime > 500) {
-
-   //     if(sensorReading1 >= 40) {
-   //       //printlogln(DEV, sensorReading1);
-   //       printlogln(BT, knockFront);
-   //     }
-   //     if(sensorReading2 >= 40) {
-   //       //printlogln(DEV, sensorReading2);
-   //       printlogln(BT, knockMid);
-   //     }
-   //     if(sensorReading3 >= 40) {
-   //       //printlogln(DEV, sensorReading3);
-   //       printlogln(BT, knockBack);
-   //     }
-
-   //     knocktime = millis();
-   // }
 }
 
