@@ -24,6 +24,7 @@ void checkKnock(){
       if(sensorReading1 > 190){
         printlogln(BT, stickUp);
       }
+      stickup_time = millis();
    }
 
    if(millis() - knocktime > 500) {
