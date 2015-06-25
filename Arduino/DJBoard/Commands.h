@@ -15,3 +15,4 @@ const char stickUpRight[] = "stickUpRight\n";
 
 const char playUltraSoundMusic_init[] = "ultrasound:";
 const char stopUltraSoundMusic[] = "stop_ultrasound\n";
+const char boardturn180[] = "turn180\n";

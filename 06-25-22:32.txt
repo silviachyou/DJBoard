@@ -1,0 +1,532 @@
+0
+# 67795 sensor3: 0 , gyro: -10.50
+# 67831 sensor3: 0 , gyro: -10.50
+$ 67870 ultrasound:   56 67764 sensor3: 0 , gyro: -10.50
+# 67795 sensor3: 0 , gyro: -10.50
+# 67831 sensor3: 0 , gyro: -10.50
+$ 67870 ultrasound:   56 67764 sensor3: 0 , gyro: -10.50
+# 67795 sensor3: 0 , gyro: -10.50
+# 67831 sensor3: 0 , gyro: -10.50
+$ 67870 ultrasound:   56# 879 sensor3: 0 , gyro: -11.50
+# 880 sensor3: 0 , gyro: -11.50
+# 882 sensor3: 0 , gyro: -11.50
+# 921 sensor3: 0 , gyro: -12.50
+# 953 sensor3: 0 , gyro: -12.50
+# 984 sensor3: 0 , gyro: -12.50
+# 1024 sensor3: 0 , gyro: -11.50
+# 1054 sensor3: 0 , gyro: -11.50
+# 1090 sensor3: 0 , gyro: -11.50
+# 1134 sensor3: 0 , gyro: -11.50
+# 1161 sensor3: 0 , gyro: -11.50
+# 1195 sensor3: 0 , gyro: -11.50
+# 1236 sensor3: 0 , gyro: -12.50
+# 1266 sensor3: 0 , gyro: -12.50
+$ 1304 ultrasound:   56.82
+
+# 1337 sensor3: 0 , gyro: -11.50
+# 1367 sensor3: 0 , gyro: -11.50
+# 1402 sensor3: 0 , gyro: -11.50
+# 1443 sensor3: 0 , gyro: -11.50
+$ 1475 ultrasound:   56.78
+
+# 1504 sensor3: 0 , gyro: -11.50
+# 1544 sensor3: 0 , gyro: -11.50
+# 1574 sensor3: 1 , gyro: -11.50
+# 1610 sensor3: 0 , gyro: -11.50
+$ 1647 ultrasound:   56.84
+
+# 1680 sensor3: 0 , gyro: -11.50
+# 1710 sensor3: 0 , gyro: -11.50
+# 1746 sensor3: 0 , gyro: -11.50
+# 1786 sensor3: 0 , gyro: -11.50
+$ 1818 ultrasound:   56.84
+
+# 1847 sensor3: 0 , gyro: -11.50
+# 1888 sensor3: 0 , gyro: -12.50
+# 1917 sensor3: 0 , gyro: -12.50
+# 1953 sensor3: 1 , gyro: -12.50
+$ 1990 ultrasound:   57.70
+
+# 2024 sensor3: 1 , gyro: -11.50
+# 2054 sensor3: 0 , gyro: -11.50
+# 2089 sensor3: 0 , gyro: -11.50
+# 2129 sensor3: 0 , gyro: -11.50
+$ 2162 ultrasound:   56.82
+
+# 2190 sensor3: 0 , gyro: -11.50
+# 2231 sensor3: 0 , gyro: -11.50
+# 2260 sensor3: 0 , gyro: -11.50
+# 2296 sensor3: 0 , gyro: -11.50
+$ 2333 ultrasound:   57.27
+
+# 2367 sensor3: 0 , gyro: -10.50
+# 2397 sensor3: 0 , gyro: -10.50
+# 2432 sensor3: 0 , gyro: -10.50
+# 2472 sensor3: 0 , gyro: -12.50
+$ 2505 ultrasound:   56.40
+
+# 2533 sensor3: 0 , gyro: -12.50
+# 2574 sensor3: 0 , gyro: -11.50
+# 2603 sensor3: 0 , gyro: -11.50
+# 2639 sensor3: 0 , gyro: -11.50
+$ 2676 ultrasound:   57.27
+
+# 2710 sensor3: 0 , gyro: -11.50
+# 2741 sensor3: 0 , gyro: -11.50
+# 2775 sensor3: 0 , gyro: -11.50
+# 2816 sensor3: 0 , gyro: -12.50
+$ 2848 ultrasound:   57.27
+
+# 2877 sensor3: 0 , gyro: -12.50
+# 2917 sensor3: 0 , gyro: -10.50
+# 2947 sensor3: 0 , gyro: -10.50
+# 2982 sensor3: 0 , gyro: -10.50
+$ 3019 ultrasound:   57.27
+
+# 3053 sensor3: 0 , gyro: -13.50
+# 3084 sensor3: 0 , gyro: -13.50
+# 3118 sensor3: 0 , gyro: -13.50
+# 3159 sensor3: 0 , gyro: -11.50
+$ 3191 ultrasound:   57.27
+
+# 3220 sensor3: 0 , gyro: -11.50
+# 3260 sensor3: 0 , gyro: -11.50
+# 3290 sensor3: 0 , gyro: -11.50
+# 3325 sensor3: 0 , gyro: -11.50
+$ 3363 ultrasound:   56.84
+
+# 3396 sensor3: 0 , gyro: -11.50
+# 3427 sensor3: 0 , gyro: -11.50
+# 3462 sensor3: 0 , gyro: -11.50
+# 3502 sensor3: 0 , gyro: -11.50
+$ 3534 ultrasound:   57.70
+
+# 3563 sensor3: 0 , gyro: -11.50
+# 3603 sensor3: 0 , gyro: -11.50
+# 3634 sensor3: 0 , gyro: -11.50
+# 3668 sensor3: 0 , gyro: -11.50
+$ 3706 ultrasound:   57.14
+
+# 3739 sensor3: 0 , gyro: -12.50
+# 3770 sensor3: 0 , gyro: -12.50
+# 3806 sensor3: 0 , gyro: -12.50
+# 3846 sensor3: 1 , gyro: -12.50
+$ 3877 ultrasound:   57.27
+
+# 3906 sensor3: 0 , gyro: -12.50
+# 3947 sensor3: 0 , gyro: -11.50
+# 3977 sensor3: 1 , gyro: -11.50
+# 4012 sensor3: 1 , gyro: -11.50
+$ 4049 ultrasound:   57.25
+
+# 4083 sensor3: 0 , gyro: -10.50
+# 4113 sensor3: 0 , gyro: -10.50
+# 4149 sensor3: 0 , gyro: -10.50
+# 4189 sensor3: 0 , gyro: -11.50
+$ 4221 ultrasound:   57.27
+
+# 4249 sensor3: 0 , gyro: -11.50
+# 4290 sensor3: 0 , gyro: -11.50
+# 4320 sensor3: 0 , gyro: -11.50
+# 4355 sensor3: 0 , gyro: -11.50
+$ 4392 ultrasound:   56.82
+
+# 4426 sensor3: 1 , gyro: -11.50
+# 4456 sensor3: 0 , gyro: -11.50
+# 4492 sensor3: 0 , gyro: -11.50
+# 4532 sensor3: 0 , gyro: -12.50
+$ 4564 ultrasound:   56.84
+
+# 4592 sensor3: 0 , gyro: -12.50
+# 4633 sensor3: 0 , gyro: -11.50
+# 4663 sensor3: 0 , gyro: -11.50
+# 4698 sensor3: 0 , gyro: -11.50
+$ 4735 ultrasound:   56.40
+
+# 4769 sensor3: 0 , gyro: -10.50
+# 4799 sensor3: 0 , gyro: -10.50
+# 4835 sensor3: 0 , gyro: -10.50
+# 4875 sensor3: 0 , gyro: -11.50
+$ 4907 ultrasound:   57.22
+
+# 4935 sensor3: 0 , gyro: -11.50
+# 4976 sensor3: 0 , gyro: -12.50
+# 5007 sensor3: 0 , gyro: -12.50
+# 5042 sensor3: 0 , gyro: -12.50
+$ 5078 ultrasound:   57.27
+
+# 5112 sensor3: 0 , gyro: -11.50
+# 5143 sensor3: 0 , gyro: -11.50
+# 5178 sensor3: 0 , gyro: -11.50
+# 5219 sensor3: 0 , gyro: -12.50
+$ 5250 ultrasound:   57.27
+
+# 5279 sensor3: 0 , gyro: -12.50
+# 5319 sensor3: 0 , gyro: -12.50
+# 5350 sensor3: 0 , gyro: -12.50
+# 5385 sensor3: 0 , gyro: -12.50
+$ 5422 ultrasound:   57.70
+
+# 5455 sensor3: 0 , gyro: -11.50
+# 5486 sensor3: 0 , gyro: -11.50
+# 5521 sensor3: 0 , gyro: -11.50
+# 5562 sensor3: 0 , gyro: -11.50
+$ 5593 ultrasound:   57.70
+
+# 5622 sensor3: 0 , gyro: -11.50
+# 5662 sensor3: 0 , gyro: -11.50
+# 5693 sensor3: 1 , gyro: -11.50
+# 5728 sensor3: 0 , gyro: -11.50
+$ 5766 ultrasound:   56.82
+
+# 5798 sensor3: 0 , gyro: -10.50
+# 5829 sensor3: 0 , gyro: -10.50
+# 5864 sensor3: 0 , gyro: -10.50
+# 5905 sensor3: 0 , gyro: -11.50
+$ 5937 ultrasound:   57.27
+
+# 5965 sensor3: 0 , gyro: -11.50
+# 6005 sensor3: 0 , gyro: -10.50
+# 6036 sensor3: 0 , gyro: -10.50
+# 6072 sensor3: 0 , gyro: -10.50
+$ 6109 ultrasound:   57.76
+
+# 6141 sensor3: 0 , gyro: -11.50
+# 6172 sensor3: 0 , gyro: -11.50
+# 6208 sensor3: 0 , gyro: -11.50
+# 6248 sensor3: 0 , gyro: -11.50
+$ 6280 ultrasound:   57.31
+
+# 6308 sensor3: 0 , gyro: -11.50
+# 6349 sensor3: 0 , gyro: -11.50
+# 6379 sensor3: 1 , gyro: -11.50
+# 6415 sensor3: 0 , gyro: -11.50
+$ 6452 ultrasound:   56.40
+
+# 6485 sensor3: 0 , gyro: -12.50
+# 6515 sensor3: 1 , gyro: -12.50
+# 6551 sensor3: 0 , gyro: -12.50
+# 6591 sensor3: 0 , gyro: -11.50
+$ 6624 ultrasound:   56.84
+
+# 6651 sensor3: 0 , gyro: -11.50
+# 6692 sensor3: 0 , gyro: -11.50
+# 6722 sensor3: 0 , gyro: -11.50
+# 6758 sensor3: 0 , gyro: -11.50
+$ 6795 ultrasound:   57.27
+
+# 6828 sensor3: 0 , gyro: -11.50
+# 6858 sensor3: 0 , gyro: -11.50
+# 6894 sensor3: 0 , gyro: -11.50
+# 6934 sensor3: 0 , gyro: -11.50
+$ 6967 ultrasound:   57.65
+
+# 6994 sensor3: 0 , gyro: -11.50
+# 7035 sensor3: 0 , gyro: -11.50
+# 7065 sensor3: 0 , gyro: -11.50
+# 7101 sensor3: 0 , gyro: -11.50
+$ 7138 ultrasound:   56.38
+
+# 7171 sensor3: 0 , gyro: -10.50
+# 7202 sensor3: 0 , gyro: -10.50
+# 7237 sensor3: 0 , gyro: -10.50
+# 7278 sensor3: 0 , gyro: -11.50
+$ 7310 ultrasound:   57.76
+
+# 7338 sensor3: 0 , gyro: -11.50
+# 7378 sensor3: 0 , gyro: -12.50
+# 7409 sensor3: 0 , gyro: -12.50
+# 7444 sensor3: 0 , gyro: -12.50
+$ 7481 ultrasound:   56.38
+
+# 7514 sensor3: 0 , gyro: -11.50
+# 7545 sensor3: 1 , gyro: -11.50
+# 7580 sensor3: 0 , gyro: -11.50
+# 7621 sensor3: 0 , gyro: -11.50
+$ 7653 ultrasound:   56.84
+
+# 7681 sensor3: 0 , gyro: -11.50
+# 7721 sensor3: 0 , gyro: -10.50
+# 7752 sensor3: 0 , gyro: -10.50
+# 7787 sensor3: 0 , gyro: -10.50
+$ 7825 ultrasound:   58.18
+
+# 7858 sensor3: 0 , gyro: -11.50
+# 7888 sensor3: 0 , gyro: -11.50
+# 7923 sensor3: 0 , gyro: -11.50
+# 7964 sensor3: 0 , gyro: -11.50
+$ 7996 ultrasound:   58.19
+
+# 8024 sensor3: 0 , gyro: -11.50
+# 8064 sensor3: 0 , gyro: -11.50
+# 8095 sensor3: 0 , gyro: -11.50
+# 8130 sensor3: 0 , gyro: -11.50
+$ 8168 ultrasound:   56.73
+
+# 8201 sensor3: 0 , gyro: -12.50
+# 8231 sensor3: 0 , gyro: -12.50
+# 8267 sensor3: 0 , gyro: -12.50
+# 8307 sensor3: 0 , gyro: -11.50
+$ 8339 ultrasound:   57.25
+
+# 8367 sensor3: 0 , gyro: -11.50
+# 8408 sensor3: 0 , gyro: -11.50
+# 8438 sensor3: 0 , gyro: -11.50
+# 8474 sensor3: 0 , gyro: -11.50
+$ 8511 ultrasound:   56.82
+
+# 8545 sensor3: 0 , gyro: -12.50
+# 8574 sensor3: 1 , gyro: -12.50
+# 8610 sensor3: 0 , gyro: -12.50
+# 8650 sensor3: 0 , gyro: -12.50
+$ 8683 ultrasound:   59.55
+
+# 8711 sensor3: 0 , gyro: -12.50
+# 8751 sensor3: 0 , gyro: -384.50
+# 8782 sensor3: 0 , gyro: -384.50
+# 8819 sensor3: 0 , gyro: -384.50
+$ 8857 ultrasound:   57.81
+
+# 8891 sensor3: 0 , gyro: -739.50
+# 8921 sensor3: 0 , gyro: -739.50
+# 8958 sensor3: 0 , gyro: -739.50
+# 8999 sensor3: 0 , gyro: -847.50
+$ 9033 ultrasound:   57.47
+
+# 9061 sensor3: 0 , gyro: -847.50
+# 9103 sensor3: 0 , gyro: -823.50
+# 9134 sensor3: 0 , gyro: -823.50
+# 9170 sensor3: 0 , gyro: -823.50
+$ 9207 ultrasound:   18.43
+
+# 9242 sensor3: 1 , gyro: -1080.50
+# 9275 sensor3: 0 , gyro: -1080.50
+# 9312 sensor3: 0 , gyro: -1080.50
+# 9355 sensor3: 0 , gyro: -1304.50
+$ 9386 ultrasound:   18.17
+
+# 9417 sensor3: 0 , gyro: -1304.50
+# 9459 sensor3: 0 , gyro: -1548.50
+$ 9492 turn180
+
+$ 9536 ultrasound:   17.88
+
+$ 9688 ultrasound:   26.08
+
+$ 9839 ultrasound:   24.85
+
+$ 9990 ultrasound:   17.25
+
+$ 10140 ultrasound:   18.50
+
+$ 10293 ultrasound:   51.13
+
+$ 10444 ultrasound:   45.32
+
+# 10508 sensor3: 0 , gyro: 935.50
+# 10509 sensor3: 0 , gyro: 935.50
+# 10515 sensor3: 0 , gyro: 935.50
+# 10551 sensor3: 0 , gyro: 935.50
+# 10593 sensor3: 0 , gyro: 138.50
+$ 10624 ultrasound:   36.35
+
+# 10655 sensor3: 0 , gyro: 138.50
+# 10696 sensor3: 1 , gyro: -1028.50
+# 10730 sensor3: 0 , gyro: -1028.50
+# 10769 sensor3: 1 , gyro: -1028.50
+$ 10808 ultrasound:   39.89
+
+# 10842 sensor3: 0 , gyro: -2040.50
+$ 10876 turn180
+
+$ 10959 ultrasound:   48.04
+
+$ 11108 ultrasound:   13.83
+
+$ 11259 ultrasound:   19.40
+
+$ 11411 ultrasound:   25.65
+
+$ 11562 ultrasound:   23.11
+
+$ 11712 ultrasound:   18.26
+
+$ 11863 ultrasound:   19.35
+
+# 11894 sensor3: 0 , gyro: 2429.50
+$ 11895 turn180
+
+$ 12016 ultrasound:   46.45
+
+$ 12168 ultrasound:   42.92
+
+$ 12317 ultrasound:   35.31
+
+$ 12620 ultrasound:   51.66
+
+# 12897 sensor3: 2 , gyro: -924.50
+# 12898 sensor3: 2 , gyro: -924.50
+# 12906 sensor3: 3 , gyro: -924.50
+# 12953 sensor3: 5 , gyro: -2932.50
+$ 12982 turn180
+
+$ 13094 ultrasound:   32.78
+
+$ 13244 ultrasound:   12.02
+
+$ 13395 ultrasound:   18.05
+
+$ 13547 ultrasound:   24.04
+
+$ 13698 ultrasound:   23.71
+
+$ 13848 ultrasound:   16.74
+
+$ 13999 ultrasound:   10.12
+
+# 14003 sensor3: 0 , gyro: 2641.50
+$ 14004 turn180
+
+$ 14151 ultrasound:   34.39
+
+$ 14302 ultrasound:   26.84
+
+$ 14453 ultrasound:   21.58
+
+$ 14603 ultrasound:   20.44
+
+$ 14755 ultrasound:   20.76
+
+$ 14906 ultrasound:   32.35
+
+# 15020 sensor3: 0 , gyro: -2918.50
+$ 15021 turn180
+
+$ 15058 ultrasound:   52.58
+
+$ 15207 ultrasound:   14.21
+
+$ 15359 ultrasound:   26.86
+
+$ 15663 ultrasound:   56.40
+
+$ 15811 ultrasound:    9.96
+
+$ 15964 ultrasound:   35.98
+
+# 16023 sensor3: 0 , gyro: 2164.50
+$ 16024 turn180
+
+$ 16115 ultrasound:   43.68
+
+$ 16266 ultrasound:   50.57
+
+$ 16417 ultrasound:   55.15
+
+$ 16568 ultrasound:   58.79
+
+$ 16720 ultrasound:   58.45
+
+$ 16871 ultrasound:   59.37
+
+$ 17022 ultrasound:   59.44
+
+# 17026 sensor3: 0 , gyro: -63.50
+# 17027 sensor3: 0 , gyro: -63.50
+# 17060 sensor3: 0 , gyro: -63.50
+# 17102 sensor3: 0 , gyro: -13.50
+# 17133 sensor3: 0 , gyro: -13.50
+# 17170 sensor3: 0 , gyro: -13.50
+$ 17208 ultrasound:   57.74
+
+# 17242 sensor3: 0 , gyro: -12.50
+# 17273 sensor3: 0 , gyro: -12.50
+# 17310 sensor3: 0 , gyro: -12.50
+# 17351 sensor3: 0 , gyro: -11.50
+$ 17385 ultrasound:   57.60
+
+# 17414 sensor3: 0 , gyro: -11.50
+# 17455 sensor3: 0 , gyro: -12.50
+# 17487 sensor3: 0 , gyro: -12.50
+# 17523 sensor3: 0 , gyro: -12.50
+$ 17561 ultrasound:   57.65
+
+# 17596 sensor3: 0 , gyro: -11.50
+# 17628 sensor3: 0 , gyro: -11.50
+# 17663 sensor3: 1 , gyro: -11.50
+# 17705 sensor3: 0 , gyro: -11.50
+$ 17738 ultrasound:   58.09
+
+# 17768 sensor3: 0 , gyro: -11.50
+# 17809 sensor3: 0 , gyro: -12.50
+# 17841 sensor3: 0 , gyro: -12.50
+# 17876 sensor3: 0 , gyro: -12.50
+$ 17915 ultrasound:   57.60
+
+# 17949 sensor3: 0 , gyro: -12.50
+# 17981 sensor3: 0 , gyro: -12.50
+# 18018 sensor3: 0 , gyro: -12.50
+# 18059 sensor3: 0 , gyro: -11.50
+$ 18091 ultrasound:   57.65
+
+# 18121 sensor3: 1 , gyro: -11.50
+# 18163 sensor3: 0 , gyro: -11.50
+# 18194 sensor3: 0 , gyro: -11.50
+# 18231 sensor3: 0 , gyro: -11.50
+$ 18269 ultrasound:   58.09
+
+# 18303 sensor3: 0 , gyro: -11.50
+# 18334 sensor3: 0 , gyro: -11.50
+# 18371 sensor3: 0 , gyro: -11.50
+# 18412 sensor3: 0 , gyro: -11.50
+$ 18446 ultrasound:   57.54
+
+# 18474 sensor3: 0 , gyro: -11.50
+# 18516 sensor3: 0 , gyro: -10.50
+# 18547 sensor3: 0 , gyro: -10.50
+# 18584 sensor3: 1 , gyro: -10.50
+$ 18622 ultrasound:   57.22
+
+# 18657 sensor3: 0 , gyro: -11.50
+# 18688 sensor3: 0 , gyro: -11.50
+# 18724 sensor3: 0 , gyro: -11.50
+# 18766 sensor3: 0 , gyro: -11.50
+$ 18799 ultrasound:   56.78
+
+# 18829 sensor3: 0 , gyro: -11.50
+# 18870 sensor3: 0 , gyro: -11.50
+# 18901 sensor3: 0 , gyro: -11.50
+# 18937 sensor3: 0 , gyro: -11.50
+$ 18976 ultrasound:   57.63
+
+# 19010 sensor3: 0 , gyro: -11.50
+# 19042 sensor3: 0 , gyro: -11.50
+# 19078 sensor3: 0 , gyro: -11.50
+# 19119 sensor3: 0 , gyro: -12.50
+$ 19152 ultrasound:   58.57
+
+# 19182 sensor3: 1 , gyro: -12.50
+# 19223 sensor3: 0 , gyro: -11.50
+# 19255 sensor3: 0 , gyro: -11.50
+# 19292 sensor3: 0 , gyro: -11.50
+$ 19329 ultrasound:   58.57
+
+# 19364 sensor3: 0 , gyro: -14.50
+# 19395 sensor3: 0 , gyro: -14.50
+# 19432 sensor3: 0 , gyro: -14.50
+# 19473 sensor3: 0 , gyro: -86.50
+$ 19507 ultrasound:   57.65
+
+# 19535 sensor3: 0 , gyro: -86.50
+# 19577 sensor3: 0 , gyro: -47.50
+# 19608 sensor3: 0 , gyro: -47.50
+# 19645 sensor3: 0 , gyro: -47.50
+$ 19683 ultrasound:   58.07
+
+# 19718 sensor3: 0 , gyro: -56.50
+# 19749 sensor3: 0 , gyro: -56.50
+# 19785 sensor3: 1 , gyro: -56.50
+# 19827 sensor3: 0 , gyro: -61.50
+$ 19860 ultrasound:   57.60
+
+# 19890

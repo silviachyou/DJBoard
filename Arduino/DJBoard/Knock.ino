@@ -1,5 +1,6 @@
 
 unsigned long knocktime = 0, stickup_time = 0, checkyield_time = 0;
+unsigned long board180_time = 0;
 
 bool knockStatus1 = 0;
 bool knockStatus2 = 0;
@@ -23,10 +24,10 @@ void checkKnock(){
 
 
    if(millis() - stickup_time > 1000){
-     printlog(DEV, "sensor3: "); 
-     printlog(DEV, sensorReading3);
-      printlog(DEV, " , gyro: ");
-      printlogln(DEV, gyro[2]);
+  //   printlog(DEV, "sensor3: "); 
+  //   printlog(DEV, sensorReading3);
+  //    printlog(DEV, " , gyro: ");
+  //    printlogln(DEV, gyro[2]);
 
       if(sensorReading3 > 190 && gyro[2] >= 1500){
         printlogln(BT, stickUpLeft);
@@ -38,6 +39,27 @@ void checkKnock(){
       }
       
    }
+
+//=== 180
+    if(millis() - board180_time > 1000){
+   //   printlog(DEV, "sensor3: "); 
+   //   printlog(DEV, sensorReading3);
+   //   printlog(DEV, " , gyro: ");
+   //   printlogln(DEV, gyro[2]);
+
+      if(sensorReading3 < 10 && gyro[2] >= 1500){
+        printlogln(BT, boardturn180);
+        printlog(DEV, "board turn 180\n");
+        board180_time = millis();
+      }
+      if(sensorReading3 < 10 && gyro[2] <= -1500){
+        printlogln(BT, boardturn180);
+        printlog(DEV, "board turn 180\n");
+        board180_time = millis();
+      }
+   }
+
+//===
 
    // if(millis() - knocktime > 500) {
 
