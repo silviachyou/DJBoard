@@ -1,11 +1,17 @@
 package com.lagendary.djboard;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
+import android.net.Uri;
+import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 import com.example.android.common.logger.Log;
+
+import java.io.IOException;
 
 /**
  * Created by joshua on 6/22/15.
@@ -16,17 +22,20 @@ public class MusicPlayer {
     private static final String TAG = "MusicPlayer";
     private SoundPool soundPool;
 
-    private static final int[] SOUND_RES_IDS = {R.raw.drum_loop, R.raw.yooo, R.raw.piano, R.raw.chaser, R.raw.beatbox, R.raw.saw_wave};
+    private static final String SHARED_PREF_SOUND_PATH_PREFIX = "sound_path_";
+    private Uri[] soundUris = new Uri[SOUND_POOL_NO];
+    private static final int[] DEFAULT_SOUND_RES_IDS = {R.raw.drum_loop, R.raw.yooo, R.raw.piano, R.raw.chaser, R.raw.beatbox, R.raw.saw_wave};
 
-    private static final int SOUND_POOL_NO = SOUND_RES_IDS.length;
+    public static final String[] SOUND_TITLES = {"Base Drum", "Board Up", "Knock Front", "Knock Mid", "Knock Back", "UltraSound"};
 
-    private static final int DRUM_SOUND_INDEX = 0;
-    private static final int BOARD_UP_SOUND_INDEX = 1;
-    private static final int BASE_SOUND_PIANO_INDEX = 2;
-    private static final int BASE_SOUND_CHASER_INDEX = 3;
-    private static final int BASE_SOUND_BEATBOX_INDEX = 4;
+    public static final int SOUND_POOL_NO = 6;
 
-    private static final int BASE_SOUND_SAW_WAVE_INDEX = 5;
+    public static final int DRUM_SOUND_INDEX = 0;
+    public static final int BOARD_UP_SOUND_INDEX = 1;
+    public static final int KNOCK_FRONT_SOUND_INDEX = 2;
+    public static final int KNOCK_MID_SOUND_INDEX = 3;
+    public static final int KNOCK_BACK_SOUND_INDEX = 4;
+    public static final int BASE_SOUND_SAW_WAVE_INDEX = 5;
 
     private int[] soundIds = new int[SOUND_POOL_NO];
     private int[] streamIds = new int[SOUND_POOL_NO];
@@ -40,6 +49,7 @@ public class MusicPlayer {
 
     public MusicPlayer(Context context){
         this.context = context;
+        initUris();
         initSoundPool();
     }
 
@@ -55,27 +65,24 @@ public class MusicPlayer {
     public boolean actionForMessage(String msg){
         switch (msg) {
             case "wheelmove":
-                soundPool.stop(streamIds[DRUM_SOUND_INDEX]);
-                streamIds[DRUM_SOUND_INDEX] = soundPool.play(soundIds[DRUM_SOUND_INDEX], 1.0f, 1.0f, 1, -1, 1.0f);
-                break;
+                return toggleLoopMusicWithNoWithVolume(DRUM_SOUND_INDEX, 1.0f);
             case "wheelstop":
-                soundPool.stop(streamIds[DRUM_SOUND_INDEX]);
-                break;
+                return toggleLoopMusicWithNoWithVolume(DRUM_SOUND_INDEX, 1.0f);
             case "boardup":
-                streamIds[BOARD_UP_SOUND_INDEX] = soundPool.play(soundIds[BOARD_UP_SOUND_INDEX], 1.0f, 1.0f, 1, 0, 1.0f);
+                playMusicOnceWithNo(BOARD_UP_SOUND_INDEX, 1.0f);
                 //playMusic(0, R.raw.the_night_out);
                 break;
             case "boarddown":
                 //stopMusic(0);
                 break;
             case "knockFront":
-                boolean frontStarted = toggleLoopMusicWithNoWithVolume(BASE_SOUND_PIANO_INDEX, 0.5f);
+                boolean frontStarted = toggleLoopMusicWithNoWithVolume(KNOCK_FRONT_SOUND_INDEX, 0.5f);
                 return frontStarted;
             case "knockMid":
-                boolean middleStarted = toggleLoopMusicWithNoWithVolume(BASE_SOUND_CHASER_INDEX, 0.5f);
+                boolean middleStarted = toggleLoopMusicWithNoWithVolume(KNOCK_MID_SOUND_INDEX, 0.5f);
                 return middleStarted;
             case "knockBack":
-                boolean backStarted = toggleLoopMusicWithNoWithVolume(BASE_SOUND_BEATBOX_INDEX, 1.0f);
+                boolean backStarted = toggleLoopMusicWithNoWithVolume(KNOCK_BACK_SOUND_INDEX, 1.0f);
                 return backStarted;
             case "turnright":
                 break;
@@ -105,6 +112,28 @@ public class MusicPlayer {
         return true;
     }
 
+    public static String getUriStringOfMusic(Context context, int i){
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        return pref.getString(SHARED_PREF_SOUND_PATH_PREFIX + i, "android.resource://" + context.getPackageName() + "/" + DEFAULT_SOUND_RES_IDS[i]);
+    }
+
+    public static void setUriStringOfMusic(Context context, String str, int i){
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        pref.edit().putString(SHARED_PREF_SOUND_PATH_PREFIX + i, str).apply();
+    }
+
+    public static void resetUriOfMusic(Context context, int i){
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        pref.edit().remove(SHARED_PREF_SOUND_PATH_PREFIX + i).apply();
+    }
+
+    private void initUris() {
+        for(int i = 0; i < SOUND_POOL_NO; i++) {
+            String uristr = getUriStringOfMusic(context, i);
+            soundUris[i] = Uri.parse(uristr);
+        }
+    }
+
     private void initSoundPool() {
         soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 1);
         soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
@@ -120,7 +149,7 @@ public class MusicPlayer {
 
 
         for(int i = 0; i < SOUND_POOL_NO; i++) {
-            soundIds[i] = soundPool.load(context, SOUND_RES_IDS[i], 1);
+            soundIds[i] = soundPool.load(soundUris[i].getPath(), 1);
         }
     }
 
@@ -147,22 +176,33 @@ public class MusicPlayer {
 
     }
 
-    private void playLoopMusicWithNo(int musicPlayerNo, float volume){
-        playMusic(musicPlayerNo, SOUND_RES_IDS[musicPlayerNo], true, volume);
+    private void playMusicOnceWithNo(int musicPlayerNo, float volume){
+        playMusic(musicPlayerNo, soundUris[musicPlayerNo], false, volume);
     }
 
-    private void playMusic(int musicPlayerNo, int resId, boolean looping, float volume){
+    private void playLoopMusicWithNo(int musicPlayerNo, float volume){
+        playMusic(musicPlayerNo, soundUris[musicPlayerNo], true, volume);
+    }
+
+    private void playMusic(int musicPlayerNo, Uri uri, boolean looping, float volume) {
         stopMusic(musicPlayerNo);
-        players[musicPlayerNo] = MediaPlayer.create(context, resId);
-        players[musicPlayerNo].setLooping(looping);
-        players[musicPlayerNo].setVolume(volume, volume);
-        players[musicPlayerNo].start();
+        try {
+            if (players[musicPlayerNo] == null) {
+                players[musicPlayerNo] = MediaPlayer.create(context, uri);
+            }
+            players[musicPlayerNo].setLooping(looping);
+            players[musicPlayerNo].setVolume(volume, volume);
+            players[musicPlayerNo].start();
+        }catch(Exception e){
+            e.printStackTrace();
+            Toast.makeText(context, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
     private void stopMusic(int musicPlayerNo){
         if (players[musicPlayerNo] != null) {
-            players[musicPlayerNo].release();
-            players[musicPlayerNo] = null;
+            players[musicPlayerNo].pause();
+            players[musicPlayerNo].seekTo(0);
         }
     }
 

@@ -46,7 +46,8 @@
     <string name="board_info_velocity">Velocity</string>
     <string name="show_music_settings">Music Settings</string>
     <string name="start_skateboarding">Start Skateboarding!</string>
-    <string name="enter_music_settings_and_simulator">Music Settings / Simulator</string>
+    <string name="enter_music_simulator">Simulator</string>
+    <string name="enter_music_settings">Music Settings</string>
     <string name="simulate_music">Simulate</string>
     <string name="abort_simulation">Abort Simulation</string>
     <string name="paste_command_here">Paste Command Here</string>

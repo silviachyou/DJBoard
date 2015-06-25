@@ -22,9 +22,9 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="0dip"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:text="@string/start_skateboarding"
-        android:layout_margin="8dp"
+        android:layout_margin="4dp"
         android:onClick="startSkateboarding"
         />
 
@@ -32,7 +32,15 @@
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
-        android:text="@string/enter_music_settings_and_simulator"
-        android:layout_margin="8dp"
+        android:text="@string/enter_music_simulator"
+        android:layout_margin="4dp"
+        android:onClick="startMusicSimulation"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:text="@string/enter_music_settings"
+        android:layout_margin="4dp"
         android:onClick="startMusicSettings"/>
 </LinearLayout>

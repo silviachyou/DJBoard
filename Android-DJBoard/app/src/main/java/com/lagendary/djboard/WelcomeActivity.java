@@ -19,7 +19,11 @@ public class WelcomeActivity extends AppCompatActivity{
         startActivity(new Intent(this, MainActivity.class));
     }
 
-    public void startMusicSettings(View view) {
+    public void startMusicSimulation(View view) {
         startActivity(new Intent(this, MusicSimulationActivity.class));
+    }
+
+    public void startMusicSettings(View view) {
+        startActivity(new Intent(this, MusicSettingsActivity.class));
     }
 }
