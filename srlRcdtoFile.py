@@ -1,6 +1,7 @@
 import serial
 import sys
-
+import datetime
+import time
 ## Boolean variable that will represent whether or not the arduino is connected
 connected = False
 
@@ -11,8 +12,8 @@ for device in locations:
    try:
 print "Trying...",device
 '''
-ser = serial.Serial('/dev/cu.usbmodem1421', 9600)  # edit serial port and rate here! right
-ser = serial.Serial('/dev/cu.usbmodem1421', 9600)  # edit serial port and rate here! left
+ser = serial.Serial('/dev/cu.usbmodem1421', 9600) # edit serial port and rate here!
+
 '''
         break
     except:
@@ -23,7 +24,9 @@ while not connected:
     serin = ser.read()
     connected = True
 
-text_file = open("serialRecord.txt", 'w')
+filename = datetime.datetime.fromtimestamp(time.time()).strftime('%m-%d-%H:%M.txt')
+
+text_file = open(filename, 'w')
 
 ## read serial data from arduino and write it to the text file 'position.txt'
 #sys.stdout.write("start")

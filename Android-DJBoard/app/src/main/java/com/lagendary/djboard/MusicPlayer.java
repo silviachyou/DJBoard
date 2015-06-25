@@ -65,9 +65,11 @@ public class MusicPlayer {
     public boolean actionForMessage(String msg){
         switch (msg) {
             case "wheelmove":
-                return toggleLoopMusicWithNoWithVolume(DRUM_SOUND_INDEX, 1.0f);
+                playLoopMusicWithNo(DRUM_SOUND_INDEX, 1.0f);
+                break;
             case "wheelstop":
-                return toggleLoopMusicWithNoWithVolume(DRUM_SOUND_INDEX, 1.0f);
+                stopMusic(DRUM_SOUND_INDEX);
+                break;
             case "boardup":
                 playMusicOnceWithNo(BOARD_UP_SOUND_INDEX, 1.0f);
                 //playMusic(0, R.raw.the_night_out);
