@@ -86,6 +86,8 @@ public class MusicPlayer {
             case "knockBack":
                 boolean backStarted = toggleLoopMusicWithNoWithVolume(KNOCK_BACK_SOUND_INDEX, 1.0f);
                 return backStarted;
+            case "stickUp":
+                return toggleLoopMusicWithNoWithVolume(KNOCK_BACK_SOUND_INDEX, 1.0f);
             case "turnright":
                 break;
             case "turnleft":
