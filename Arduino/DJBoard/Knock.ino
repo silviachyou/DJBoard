@@ -13,14 +13,21 @@ void checkKnock(){
    sensorReading2 = analogRead(knockSensor2);
    sensorReading3 = analogRead(knockSensor3);
 
+   printlog(DEV, "knock :");
+   printlog(DEV, sensorReading1);
+   printlog(DEV, " ");
+   printlog(DEV, sensorReading2);
+   printlog(DEV, " ");
+   printlogln(DEV, sensorReading3);
+
    if(millis() - knocktime > 500) {
-//            Serial.print("SENSOR1:");        
-//       Serial.println(sensorReading1);        
-//                       Serial.print("SENSOR1:");        
-//       Serial.println(sensorReading2);   
-//                       Serial.print("SENSOR1:");        
-//       Serial.println(sensorReading3);   
-         
+//            Serial.print("SENSOR1:");
+//       Serial.println(sensorReading1);
+//                       Serial.print("SENSOR1:");
+//       Serial.println(sensorReading2);
+//                       Serial.print("SENSOR1:");
+//       Serial.println(sensorReading3);
+
        if(sensorReading1 >= 40) {
          //printlogln(DEV, sensorReading1);
          printlogln(BT, knockFront);
@@ -33,7 +40,7 @@ void checkKnock(){
          //printlogln(DEV, sensorReading3);
          printlogln(BT, knockBack);
        }
-       
+
        knocktime = millis();
    }
 }

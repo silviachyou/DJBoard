@@ -11,8 +11,8 @@ for device in locations:
    try:
 print "Trying...",device
 '''
-ser = serial.Serial('/dev/cu.usbmodem1411', 9600) # edit serial port and rate here!
-
+ser = serial.Serial('/dev/cu.usbmodem1421', 9600)  # edit serial port and rate here! right
+ser = serial.Serial('/dev/cu.usbmodem1421', 9600)  # edit serial port and rate here! left
 '''
         break
     except:
@@ -27,10 +27,10 @@ text_file = open("serialRecord.txt", 'w')
 
 ## read serial data from arduino and write it to the text file 'position.txt'
 #sys.stdout.write("start")
-while 1:
+while True:
     if ser.inWaiting():
-        x=ser.read()
-        if x=="serialEnd":
+        x = ser.read()
+        if x == "serialEnd":
             break
         sys.stdout.write(x)
         text_file.write(x)
@@ -41,9 +41,6 @@ while 1:
         '''
         text_file.flush()
 ## close the serial connection and text file
-#print("serialEnd!") 
+#print("serialEnd!")
 text_file.close()
 ser.close()
-
-
-
