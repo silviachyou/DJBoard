@@ -1,0 +1,41 @@
+r1: 0 , g.50
+# 9720 sensor1: 0 , gyro: -10.50
+# 9755 sensor1: 2 , gyro: -10.50
+# 9801 sensor1: 0 , gyro: -10.50
+# 9826 sensor1: 0 , g# 881 sensor1: 53 , gyro: 930.50
+# 882 sensor1: 51 , gyro: 930.50
+# 886 sensor1: 51 , gyro: 930.50
+# 926 sensor1: 56 , gyro: 890.50
+# 961 sensor1: 49 , gyro: 890.50
+# 992 sensor1: 49 , gyro: 890.50
+# 1032 sensor1: 48 , gyro: -54.50
+# 1064 sensor1: 46 , gyro: -54.50
+# 1100 sensor1: 36 , gyro: -54.50
+# 1147 sensor1: 23 , gyro: -16.50
+# 1173 sensor1: 19 , gyro: -16.50
+# 1210 sensor1: 4 , gyro: -16.50
+# 1249 sensor1: 1 , gyro: 16.50
+# 1279 sensor1: 1 , gyro: 16.50
+# 1318 sensor1: 0 , gyro: 16.50
+# 1352 sensor1: 0 , gyro: -7.50
+# 1382 sensor1: 0 , gyro: -7.50
+# 1417 sensor1: 4 , gyro: -7.50
+# 1455 sensor1: 9 , gyro: 3.50
+# 1496 sensor1: 19 , gyro: 3.50
+# 1518 sensor1: 32 , gyro: 3.50
+# 1557 sensor1: 47 , gyro: -225.50
+# 1590 sensor1: 54 , gyro: -225.50
+# 1627 sensor1: 56 , gyro: -225.50
+# 1676 sensor1: 65 , gyro: -504.50
+# 1702 sensor1: 67 , gyro: -504.50
+# 1740 sensor1: 79 , gyro: -504.50
+# 1781 sensor1: 89 , gyro: -938.50
+# 1815 sensor1: 89 , gyro: -938.50
+# 1852 sensor1: 83 , gyro: -938.50
+# 1894 sensor1: 75 , gyro: -1058.50
+# 1929 sensor1: 70 , gyro: -1058.50
+# 1966 sensor1: 63 , gyro: -1058.50
+# 2018 sensor1: 7 , gyro: -479.50
+# 2041 sensor1: 4 , gyro: -479.50
+# 2078 sensor1: 6 , gyro: -479.50
+

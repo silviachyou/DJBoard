@@ -34,7 +34,7 @@ void checkWheelMove(){
     dtostrf(dis, 8, 0, sofd);
     strcat(dString, sofd);  
     strcat(dString, eol);
-    printlogln(BT, dString);
+//    printlogln(BT, dString);
 
 
     if(!isMoving){ // previous state: stop
@@ -46,15 +46,15 @@ void checkWheelMove(){
       /* velocity */
       v = (double)wheelLen*10/(double)duration; // cm/millis -> m/s
       
-      printlog(DEV,"velocity: ");
-      printlogln(DEV, v);
+//      printlog(DEV,"velocity: ");
+//      printlogln(DEV, v);
       
       char vString[80]="v= ";
       char sofv[20];
       dtostrf(v, 6, 4, sofv);
       strcat(vString, sofv);  
       strcat(vString, eol);
-      printlogln(BT, vString);
+//      printlogln(BT, vString);
       
     }
     time = millis();

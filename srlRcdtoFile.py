@@ -12,7 +12,7 @@ for device in locations:
    try:
 print "Trying...",device
 '''
-ser = serial.Serial('/dev/cu.usbmodem1421', 9600) # edit serial port and rate here!
+ser = serial.Serial('/dev/cu.usbmodem1411', 9600) # edit serial port and rate here!
 
 '''
         break
