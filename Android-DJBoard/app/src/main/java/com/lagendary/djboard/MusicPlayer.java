@@ -26,15 +26,18 @@ public class MusicPlayer {
     private Uri[] soundUris = new Uri[SOUND_POOL_NO];
     private static final int[] DEFAULT_SOUND_RES_IDS = {R.raw.drum_loop, R.raw.yooo, R.raw.piano, R.raw.chaser, R.raw.beatbox, R.raw.saw_wave};
 
-    public static final String[] SOUND_TITLES = {"Base Drum", "Board Up", "Knock Front", "Knock Mid", "Knock Back", "UltraSound"};
+    public static final String[] SOUND_TITLES = {"Base Drum", "Board Up", "Stick Up Right", "Stick Up Left", "Board Turn 180", "UltraSound"};
 
     public static final int SOUND_POOL_NO = 6;
 
     public static final int DRUM_SOUND_INDEX = 0;
     public static final int BOARD_UP_SOUND_INDEX = 1;
-    public static final int KNOCK_FRONT_SOUND_INDEX = 2;
-    public static final int KNOCK_MID_SOUND_INDEX = 3;
-    public static final int KNOCK_BACK_SOUND_INDEX = 4;
+    public static final int STICK_UP_RIGHT_INDEX = 2;
+    public static final int STICK_UP_LEFT_INDEX = 3;
+    public static final int BOARD_TURN_180_INDEX = 4;
+    //public static final int KNOCK_FRONT_SOUND_INDEX = 2;
+    //public static final int KNOCK_MID_SOUND_INDEX = 3;
+    //public static final int KNOCK_BACK_SOUND_INDEX = 4;
     public static final int BASE_SOUND_SAW_WAVE_INDEX = 5;
 
     private int[] soundIds = new int[SOUND_POOL_NO];
@@ -77,6 +80,7 @@ public class MusicPlayer {
             case "boarddown":
                 //stopMusic(0);
                 break;
+            /*
             case "knockFront":
                 boolean frontStarted = toggleLoopMusicWithNoWithVolume(KNOCK_FRONT_SOUND_INDEX, 0.5f);
                 return frontStarted;
@@ -86,8 +90,16 @@ public class MusicPlayer {
             case "knockBack":
                 boolean backStarted = toggleLoopMusicWithNoWithVolume(KNOCK_BACK_SOUND_INDEX, 1.0f);
                 return backStarted;
-            case "stickUp":
-                return toggleLoopMusicWithNoWithVolume(KNOCK_BACK_SOUND_INDEX, 1.0f);
+                */
+            case "stickUpLeft":
+                playMusicOnceWithNo(STICK_UP_LEFT_INDEX, 1.0f);
+                break;
+            case "stickUpRight":
+                playMusicOnceWithNo(STICK_UP_RIGHT_INDEX, 1.0f);
+                break;
+            case "turn180":
+                playMusicOnceWithNo(BOARD_TURN_180_INDEX, 1.0f);
+                break;
             case "turnright":
                 break;
             case "turnleft":
