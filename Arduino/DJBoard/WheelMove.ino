@@ -54,7 +54,7 @@ void checkWheelMove(){
       dtostrf(v, 6, 4, sofv);
       strcat(vString, sofv);  
       strcat(vString, eol);
-//      printlogln(BT, vString);
+      printlogln(BT, vString);
       
     }
     time = millis();
