@@ -5,7 +5,7 @@ int count=0, s=0, r=0;
 unsigned long rolltime=0;
 
 void boardRollingSetup() {
-  
+
   previousRoll=roll;
   rolltime=millis();
 }
@@ -30,21 +30,21 @@ void rolling(){
   Serial.println(TO_DEG(diff));
 */
   int direction;
-  
+
   if(TO_DEG(diff) > 13){
-    direction=1; 
-   
+    direction=1;
+
   }
   else if(TO_DEG(diff) < -13){
     direction=-1;
-   
+
   }
- 
+
   if(previousDrt==direction){
     count+=2;
-    if(count>4){ 
+    if(count>4){
       if(direction ==1 ){
-        //Serial.println("right"); 
+        //Serial.println("right");
         if(r==0){
           printlogln(BT, turnRight);
           r=1;
@@ -68,7 +68,7 @@ void rolling(){
       r=0;
     }
   }
-  
+
   previousRoll=roll;
 }
 

@@ -1,23 +1,24 @@
 bool isStringHead = true;
 
+
 void printlog(char tag, const char *message){
-  
+
   checkIfStringHead(tag);
   sendBT(tag, message);
-  
+
   Serial.print(message);
 }
 
 void printlogln(char tag,const char *message){
   checkIfStringHead(tag);
   sendBT(tag, message);
-  
+
   isStringHead = true;
   Serial.println(message);
 }
 
 void printlog(char tag, int message){
-  
+
   checkIfStringHead(tag);
   sendBT(tag, message);
   Serial.print(message);
@@ -69,24 +70,44 @@ void checkIfStringHead(char tag) {
 
 void sendBT(char tag, const char *message){
   if(tag == BT){
+    Bluetooth.write(tag);
+    Bluetooth.write(" ");
+    unsigned long duration = millis()-globalTime;
+    Bluetooth.write(duration);
+    Bluetooth.write(" ");
     Bluetooth.write(message);
   }
 }
 
 void sendBT(char tag, int message){
   if(tag == BT){
+    Bluetooth.write(tag);
+    Bluetooth.write(" ");
+    unsigned long duration = millis()-globalTime;
+    Bluetooth.write(duration);
+    Bluetooth.write(" ");
     Bluetooth.write(message);
   }
 }
 
 void sendBT(char tag, unsigned long message){
   if(tag == BT){
+    Bluetooth.write(tag);
+    Bluetooth.write(" ");
+    unsigned long duration = millis()-globalTime;
+    Bluetooth.write(duration);
+    Bluetooth.write(" ");
     Bluetooth.write(message);
   }
 }
 
 void sendBT(char tag, double message){
   if(tag == BT){
+    Bluetooth.write(tag);
+    Bluetooth.write(" ");
+    unsigned long duration = millis()-globalTime;
+    Bluetooth.write(duration);
+    Bluetooth.write(" ");
     Bluetooth.write(message);
   }
 }
