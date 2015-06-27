@@ -6,12 +6,11 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.net.Uri;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.example.android.common.logger.Log;
-
-import java.io.IOException;
 
 /**
  * Created by joshua on 6/22/15.
@@ -24,28 +23,56 @@ public class MusicPlayer {
 
     private static final String SHARED_PREF_SOUND_PATH_PREFIX = "sound_path_";
     private Uri[] soundUris = new Uri[SOUND_POOL_NO];
-    private static final int[] DEFAULT_SOUND_RES_IDS = {R.raw.drum_loop, R.raw.yooo, R.raw.piano, R.raw.chaser, R.raw.beatbox, R.raw.saw_wave};
+    private static final int[] DEFAULT_SOUND_RES_IDS = {R.raw.yooo, R.raw.piano, R.raw.chaser, R.raw.beatbox, R.raw.saw_wave, R.raw.drum_loop, R.raw.piano, R.raw.chaser, R.raw.beatbox};
 
-    public static final String[] SOUND_TITLES = {"Base Drum", "Board Up", "Knock Front", "Knock Mid", "Knock Back", "UltraSound"};
+    public static final String[] SOUND_TITLES = {"Board Up", "Stick Up Right", "Stick Up Left", "Board Turn 180", "UltraSound", "Base Sound 1", "Base Sound 2", "Base Sound 3", "Base Sound 4"};
 
-    public static final int SOUND_POOL_NO = 6;
+    public static final int SOUND_POOL_NO = 9;
 
-    public static final int DRUM_SOUND_INDEX = 0;
-    public static final int BOARD_UP_SOUND_INDEX = 1;
-    public static final int KNOCK_FRONT_SOUND_INDEX = 2;
-    public static final int KNOCK_MID_SOUND_INDEX = 3;
-    public static final int KNOCK_BACK_SOUND_INDEX = 4;
-    public static final int BASE_SOUND_SAW_WAVE_INDEX = 5;
+    public static final int BOARD_UP_SOUND_INDEX = 0;
+    public static final int STICK_UP_RIGHT_INDEX = 1;
+    public static final int STICK_UP_LEFT_INDEX = 2;
+    public static final int BOARD_TURN_180_INDEX = 3;
+    //public static final int KNOCK_FRONT_SOUND_INDEX = 2;
+    //public static final int KNOCK_MID_SOUND_INDEX = 3;
+    //public static final int KNOCK_BACK_SOUND_INDEX = 4;
+    public static final int BASE_SOUND_SAW_WAVE_INDEX = 4;
+
+    public static final int BASE_SOUND_1_INDEX = 5;
+    public static final int BASE_SOUND_2_INDEX = 6;
+    public static final int BASE_SOUND_3_INDEX = 7;
+    public static final int BASE_SOUND_4_INDEX = 8;
 
     private int[] soundIds = new int[SOUND_POOL_NO];
     private int[] streamIds = new int[SOUND_POOL_NO];
 
+    private long loopTime = 1846; // 130bpm, 4 beat time
+    private Handler handler = new Handler();
 
     private MediaPlayer[] players = new MediaPlayer[SOUND_POOL_NO];
 
     private boolean[] soundPlaying = new boolean[SOUND_POOL_NO]; // sparse, depends on if is toggled by the developer
 
     private Context context;
+
+    private static final double VTH1 = 0.0;
+    private static final double VTH2 = 10.0;
+    private static final double VTH3 = 15.0;
+    private static final double VTH4 = 20.0;
+
+    private double prevBoardVelocity = 0;
+    private double boardVelocity = 0;
+    private Runnable scheduleWheelMoveRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+            checkBaseSound(boardVelocity, prevBoardVelocity);
+            prevBoardVelocity = boardVelocity;
+
+            handler.postDelayed(scheduleWheelMoveRunnable, loopTime);
+        }
+
+    };
 
     public MusicPlayer(Context context){
         this.context = context;
@@ -60,15 +87,21 @@ public class MusicPlayer {
             initSoundPool();
             soundPlaying[i] = false;
         }
+        handler.removeCallbacksAndMessages(null);
+        prevBoardVelocity = 0.0;
+        boardVelocity = 0.0;
     }
 
     public boolean actionForMessage(String msg){
         switch (msg) {
             case "wheelmove":
-                playLoopMusicWithNo(DRUM_SOUND_INDEX, 1.0f);
+                handler.post(scheduleWheelMoveRunnable);
                 break;
             case "wheelstop":
-                stopMusic(DRUM_SOUND_INDEX);
+                handler.removeCallbacksAndMessages(null);
+                checkBaseSound(0.0, 1.0);
+                prevBoardVelocity = 0.0;
+                boardVelocity = 0.0;
                 break;
             case "boardup":
                 playMusicOnceWithNo(BOARD_UP_SOUND_INDEX, 1.0f);
@@ -77,6 +110,7 @@ public class MusicPlayer {
             case "boarddown":
                 //stopMusic(0);
                 break;
+            /*
             case "knockFront":
                 boolean frontStarted = toggleLoopMusicWithNoWithVolume(KNOCK_FRONT_SOUND_INDEX, 0.5f);
                 return frontStarted;
@@ -86,8 +120,16 @@ public class MusicPlayer {
             case "knockBack":
                 boolean backStarted = toggleLoopMusicWithNoWithVolume(KNOCK_BACK_SOUND_INDEX, 1.0f);
                 return backStarted;
-            case "stickUp":
-                return toggleLoopMusicWithNoWithVolume(KNOCK_BACK_SOUND_INDEX, 1.0f);
+                */
+            case "stickUpLeft":
+                playMusicOnceWithNo(STICK_UP_LEFT_INDEX, 1.0f);
+                break;
+            case "stickUpRight":
+                playMusicOnceWithNo(STICK_UP_RIGHT_INDEX, 1.0f);
+                break;
+            case "turn180":
+                playMusicOnceWithNo(BOARD_TURN_180_INDEX, 1.0f);
+                break;
             case "turnright":
                 break;
             case "turnleft":
@@ -109,11 +151,44 @@ public class MusicPlayer {
 
                     soundPool.setRate(streamIds[BASE_SOUND_SAW_WAVE_INDEX], rate);
                 }else if(msg.startsWith("v= ")) {
+                    try {
+                        boardVelocity = Double.parseDouble(msg.substring(3).trim());
+                    } catch (NumberFormatException e){}
                 }else if(msg.startsWith("d= ")) {
                 }
                 break;
         }
         return true;
+    }
+
+    private void checkBaseSound(double velocity, double prevBoardVelocity){
+        if(velocity > prevBoardVelocity){
+            if(velocity > VTH1) {
+                playLoopMusicWithNo(BASE_SOUND_1_INDEX, 1.0f);
+            }
+            if(velocity > VTH2) {
+                playLoopMusicWithNo(BASE_SOUND_2_INDEX, 1.0f);
+            }
+            if(velocity > VTH3) {
+                playLoopMusicWithNo(BASE_SOUND_3_INDEX, 1.0f);
+            }
+            if(velocity > VTH4) {
+                playLoopMusicWithNo(BASE_SOUND_4_INDEX, 1.0f);
+            }
+        }else if(velocity < prevBoardVelocity){
+            if(velocity <= VTH1) {
+                stopMusic(BASE_SOUND_1_INDEX);
+            }
+            if(velocity <= VTH2) {
+                stopMusic(BASE_SOUND_2_INDEX);
+            }
+            if(velocity <= VTH3) {
+                stopMusic(BASE_SOUND_3_INDEX);
+            }
+            if(velocity <= VTH4) {
+                stopMusic(BASE_SOUND_4_INDEX);
+            }
+        }
     }
 
     public static String getUriStringOfMusic(Context context, int i){
@@ -185,6 +260,10 @@ public class MusicPlayer {
     }
 
     private void playLoopMusicWithNo(int musicPlayerNo, float volume){
+        if(players[musicPlayerNo] != null && players[musicPlayerNo].isPlaying()){
+            return;
+        }
+
         playMusic(musicPlayerNo, soundUris[musicPlayerNo], true, volume);
     }
 
