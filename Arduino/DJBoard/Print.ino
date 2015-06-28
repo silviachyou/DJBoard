@@ -73,7 +73,11 @@ void sendBT(char tag, const char *message){
     Bluetooth.write(tag);
     Bluetooth.write(" ");
     unsigned long duration = millis()-globalTime;
-    Bluetooth.write(duration);
+
+    char s[10];
+    sprintf (s, "%u\0", duration);
+    // itoa((int)duration, s, 10);
+    Bluetooth.write(s);
     Bluetooth.write(" ");
     Bluetooth.write(message);
   }
@@ -84,7 +88,11 @@ void sendBT(char tag, int message){
     Bluetooth.write(tag);
     Bluetooth.write(" ");
     unsigned long duration = millis()-globalTime;
-    Bluetooth.write(duration);
+
+    char s[10];
+    sprintf (s, "%u\0", duration);
+    // itoa((int)duration, s, 10);
+    Bluetooth.write(s);
     Bluetooth.write(" ");
     Bluetooth.write(message);
   }
@@ -95,7 +103,11 @@ void sendBT(char tag, unsigned long message){
     Bluetooth.write(tag);
     Bluetooth.write(" ");
     unsigned long duration = millis()-globalTime;
-    Bluetooth.write(duration);
+
+    char s[10];
+    sprintf (s, "%u\0", duration);
+    // itoa((int)duration, s, 10);
+    Bluetooth.write(s);
     Bluetooth.write(" ");
     Bluetooth.write(message);
   }
@@ -106,7 +118,11 @@ void sendBT(char tag, double message){
     Bluetooth.write(tag);
     Bluetooth.write(" ");
     unsigned long duration = millis()-globalTime;
-    Bluetooth.write(duration);
+
+    char s[10];
+    sprintf (s, "%u\0", duration);
+      // (int)itoa( duration,s, 10);
+    Bluetooth.write(s);
     Bluetooth.write(" ");
     Bluetooth.write(message);
   }

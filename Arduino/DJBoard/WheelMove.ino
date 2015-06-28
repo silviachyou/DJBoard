@@ -14,25 +14,26 @@ void wheelMoveSetup() {
 }
 
 void checkWheelMove(){
-  
+
   IRVal=digitalRead(iRSensorPin);
 
   //HIGH: white
   //LOW: black
- 
+
   if(IRVal==HIGH && isBlack){  //first seen white
-     
+
     isBlack = false;
     /* distance */
+    duration = millis()-time;
     dis = dis + wheelLen; // += 15cm
-     
+
     printlog(DEV, "distance: ");
     printlogln(DEV, dis);
-     
+
     char dString[80]="dis= ";
     char sofd[20];
     dtostrf(dis, 8, 0, sofd);
-    strcat(dString, sofd);  
+    strcat(dString, sofd);
     strcat(dString, eol);
 //    printlogln(BT, dString);
 
@@ -42,29 +43,29 @@ void checkWheelMove(){
       isMoving = true;
     }
     else{ // previous state: moving
-            
+
       /* velocity */
       v = (double)wheelLen*10/(double)duration; // cm/millis -> m/s
-      
-//      printlog(DEV,"velocity: ");
+
+     // printlog(DEV,"velocity: ");
 //      printlogln(DEV, v);
-      
+
       char vString[80]="v= ";
       char sofv[20];
       dtostrf(v, 6, 4, sofv);
-      strcat(vString, sofv);  
+      strcat(vString, sofv);
       strcat(vString, eol);
       printlogln(BT, vString);
-      
+
     }
     time = millis();
   }
-  else if(IRVal==LOW) {  //isBlack 
+  else if(IRVal==LOW) {  //isBlack
     isBlack = true;
   }
   if(millis()-time>1000 && isMoving){ // stop
       printlogln(BT, stopWheelMusic);
       isMoving = false;
       v = 0;
-  }  
+  }
 }
