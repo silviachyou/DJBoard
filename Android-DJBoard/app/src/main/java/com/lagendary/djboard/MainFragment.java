@@ -17,8 +17,10 @@
 package com.lagendary.djboard;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -109,6 +111,8 @@ public class MainFragment extends Fragment {
 
     private MusicPlayer mPlayer;
 
+    private StringBuilder fullMsg = new StringBuilder();
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -186,6 +190,18 @@ public class MainFragment extends Fragment {
         knockFrontTextView = (TextView) view.findViewById(R.id.knock_state_front);
         knockMidTextView = (TextView) view.findViewById(R.id.knock_state_mid);
         knockBackTextView = (TextView) view.findViewById(R.id.knock_state_back);
+        view.findViewById(R.id.share).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "I've made music with DJBoard!");
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
+
+            }
+        });
+
         resetViews();
     }
 
@@ -462,8 +478,26 @@ public class MainFragment extends Fragment {
             case R.id.toggle_bluetooth_log:
                 mConversationView.setVisibility(mConversationView.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 return true;
+            case R.id.show_all_commands:
+                showAllCommandsDialog();
+                return true;
         }
         return false;
+    }
+
+    public void showAllCommandsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        EditText text = new EditText(getActivity());
+        text.setText(fullMsg.toString());
+        builder.setView(text);
+        builder.setNegativeButton("DONE", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.show();
+
     }
 
 
@@ -484,6 +518,9 @@ public class MainFragment extends Fragment {
     private void actionForMessage(String msg) {
         mConversationArrayAdapter.add(BOARD_ACTION_TAG + ":  " + msg);
         boolean result = mPlayer.actionForMessage(msg);
+
+        fullMsg.append(msg);
+        fullMsg.append("\n");
 
         switch (msg) {
             case "wheelmove":

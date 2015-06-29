@@ -1,7 +1,9 @@
 package com.lagendary.djboard;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -20,6 +22,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 
 /**
  * A placeholder fragment containing a simple view.
@@ -29,6 +33,10 @@ public class MusicSettingsFragment extends Fragment {
     private LinearLayout view;
     private ListView listView;
     private MusicItemAdapter adapter;
+
+    private Button setSoundSetButton;
+    private Button setBPMButton;
+
 
     private static final int REQUEST_PICK_MUSIC = 27;
 
@@ -42,18 +50,36 @@ public class MusicSettingsFragment extends Fragment {
         listView = (ListView) view.findViewById(android.R.id.list);
         adapter = new MusicItemAdapter(getActivity());
 
+        setSoundSetButton = (Button) view.findViewById(R.id.set_sound_set_button);
+        setSoundSetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSelectSoundSetDialog();
+            }
+        });
+        setBPMButton = (Button) view.findViewById(R.id.set_bpm_button);
+        setBPMButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSetBPMDialog();
+            }
+        });
+
+
         listView.setAdapter(adapter);
         reloadList();
         return view;
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == Activity.RESULT_OK) {
             Uri uriSound = data.getData();
-            String soundUriStr = uriSound.toString();
+            //String soundUriStr = uriSound.toString();
+            String path = Util.getPath(getActivity(), uriSound);
             try{
-                MusicPlayer.setUriStringOfMusic(getActivity(), uriSound.toString(), requestCode - REQUEST_PICK_MUSIC);
+                MusicPlayer.setUriStringOfMusic(getActivity(), path, requestCode - REQUEST_PICK_MUSIC);
             }catch (Exception e){
                 Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_LONG).show();
             }
@@ -63,16 +89,86 @@ public class MusicSettingsFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    private void showSelectSoundSetDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        ArrayList<String> array = new ArrayList<>();
+        for(int i = 0; i < 10; i++){
+            array.add(i+"");
+        }
+        String[] strarr = array.toArray(new String[array.size()]);
+
+        builder.setItems(strarr, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                MusicPlayer.setSoundSetNo(getActivity(), which);
+                Toast.makeText(getActivity(), "set: "+which, Toast.LENGTH_LONG).show();
+                reloadList();
+            }
+        });
+        builder.setTitle("Select sound set:");
+        builder.show();
+    }
+
+    private void showSetBPMDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Set BPM");
+
+        final EditText editText = new EditText(getActivity());
+        editText.setText(MusicPlayer.getBPM(getActivity()) + "");
+        builder.setView(editText);
+        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                try{
+                    int bpm = Integer.parseInt(editText.getText().toString());
+                    MusicPlayer.setBPM(getActivity(), bpm);
+                    Toast.makeText(getActivity(), "BPM set to "+bpm+"!", Toast.LENGTH_LONG).show();
+                    reloadList();
+                }catch (Exception e){
+                    Toast.makeText(getActivity(), "BPM must be an integer!", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.setCancelable(false);
+
+        builder.show();
+    }
+
     private void reloadList() {
+        adapter.clear();
         for(int i = 0; i < MusicPlayer.SOUND_POOL_NO; i++){
             adapter.add(new MusicItem(MusicPlayer.SOUND_TITLES[i], MusicPlayer.getUriStringOfMusic(getActivity(), i)));
         }
         adapter.notifyDataSetChanged();
+        int set = MusicPlayer.getSoundSetNo(getActivity());
+        setSoundSetButton.setText("Set: "+set);
+        setBPMButton.setText("BPM: "+MusicPlayer.getBPM(getActivity()));
     }
 
     private void startSelectMusic(int no) {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, REQUEST_PICK_MUSIC + no);
+
+        try {
+
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("*/*");
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+            startActivityForResult(
+                    Intent.createChooser(intent, "Select a File to Upload"),
+                    REQUEST_PICK_MUSIC + no);
+        } catch (android.content.ActivityNotFoundException ex) {
+            // Potentially direct the user to the Market with a Dialog
+
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, REQUEST_PICK_MUSIC + no);
+        }
+
     }
 
     private class MusicItem{
@@ -142,7 +238,7 @@ public class MusicSettingsFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     MusicPlayer.resetUriOfMusic(getActivity(), position);
-                    notifyDataSetChanged();
+                    reloadList();
                 }
             });
 

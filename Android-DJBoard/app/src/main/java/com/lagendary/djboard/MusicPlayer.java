@@ -21,6 +21,11 @@ public class MusicPlayer {
     private static final String TAG = "MusicPlayer";
     private SoundPool soundPool;
 
+
+    private static final String SHARED_PREF_SOUND_SET = "sound_set";
+
+    private static final String SHARED_PREF_BPM = "sound_BPM";
+
     private static final String SHARED_PREF_SOUND_PATH_PREFIX = "sound_path_";
     private Uri[] soundUris = new Uri[SOUND_POOL_NO];
     private static final int[] DEFAULT_SOUND_RES_IDS = {R.raw.yooo, R.raw.piano, R.raw.chaser, R.raw.beatbox, R.raw.saw_wave, R.raw.drum_loop, R.raw.piano, R.raw.chaser, R.raw.beatbox};
@@ -191,19 +196,40 @@ public class MusicPlayer {
         }
     }
 
+    public static int getSoundSetNo(Context context) {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        return pref.getInt(SHARED_PREF_SOUND_SET, 0);
+    }
+
+    public static void setSoundSetNo(Context context, int no) {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        pref.edit().putInt(SHARED_PREF_SOUND_SET, no).apply();
+    }
+
+    public static int getBPM(Context context){
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        return pref.getInt(SHARED_PREF_BPM + getSoundSetNo(context), 130);
+    }
+
+    public static void setBPM(Context context, int bpm){
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+        pref.edit().putInt(SHARED_PREF_BPM + getSoundSetNo(context), bpm).apply();
+    }
+
+
     public static String getUriStringOfMusic(Context context, int i){
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-        return pref.getString(SHARED_PREF_SOUND_PATH_PREFIX + i, "android.resource://" + context.getPackageName() + "/" + DEFAULT_SOUND_RES_IDS[i]);
+        return pref.getString(SHARED_PREF_SOUND_PATH_PREFIX + getSoundSetNo(context) + "_" + i, "android.resource://" + context.getPackageName() + "/" + DEFAULT_SOUND_RES_IDS[i]);
     }
 
     public static void setUriStringOfMusic(Context context, String str, int i){
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-        pref.edit().putString(SHARED_PREF_SOUND_PATH_PREFIX + i, str).apply();
+        pref.edit().putString(SHARED_PREF_SOUND_PATH_PREFIX + getSoundSetNo(context) + "_" + i, str).apply();
     }
 
     public static void resetUriOfMusic(Context context, int i){
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-        pref.edit().remove(SHARED_PREF_SOUND_PATH_PREFIX + i).apply();
+        pref.edit().remove(SHARED_PREF_SOUND_PATH_PREFIX + getSoundSetNo(context) + "_"  + i).apply();
     }
 
     private void initUris() {
@@ -211,6 +237,7 @@ public class MusicPlayer {
             String uristr = getUriStringOfMusic(context, i);
             soundUris[i] = Uri.parse(uristr);
         }
+        loopTime = (long) ((1000 * 60.0 * 4.0) / getBPM(context));
     }
 
     private void initSoundPool() {

@@ -79,6 +79,7 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@id/ultrasonic_text"
             android:layout_margin="8dp"
+            android:visibility="gone"
             />
         <TextView
             android:id="@+id/knock_state_front"
@@ -92,6 +93,7 @@
             android:layout_toLeftOf="@id/knock_state_mid"
             android:layout_alignTop="@id/knock_state_mid"
             android:layout_alignBottom="@id/knock_state_mid"
+            android:visibility="gone"
             />
         <TextView
             android:id="@+id/knock_state_back"
@@ -105,7 +107,17 @@
             android:layout_toRightOf="@id/knock_state_mid"
             android:layout_alignTop="@id/knock_state_mid"
             android:layout_alignBottom="@id/knock_state_mid"
+            android:visibility="gone"
             />
+        <ImageButton
+            android:id="@+id/share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ultrasonic_text"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_share_grey600_48dp"
+            android:padding="32dp"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
 
     </RelativeLayout>
 
