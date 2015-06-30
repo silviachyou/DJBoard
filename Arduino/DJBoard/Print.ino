@@ -70,51 +70,25 @@ void checkIfStringHead(char tag) {
 
 void sendBT(char tag, const char *message){
   if(tag == BT){
-    Bluetooth.write(tag);
-    Bluetooth.write(" ");
-    unsigned long duration = millis()-globalTime;
-
-    char s[10];
-    sprintf (s, "%u\0", duration);
-    // itoa((int)duration, s, 10);
-    Bluetooth.write(s);
-    Bluetooth.write(" ");
     Bluetooth.write(message);
   }
 }
 
 void sendBT(char tag, int message){
   if(tag == BT){
-    Bluetooth.write(tag);
-    Bluetooth.write(" ");
-    unsigned long duration = millis()-globalTime;
-
-    char s[10];
-    sprintf (s, "%u\0", duration);
-    // itoa((int)duration, s, 10);
-    Bluetooth.write(s);
-    Bluetooth.write(" ");
     Bluetooth.write(message);
   }
 }
 
 void sendBT(char tag, unsigned long message){
   if(tag == BT){
-    Bluetooth.write(tag);
-    Bluetooth.write(" ");
-    unsigned long duration = millis()-globalTime;
-
-    char s[10];
-    sprintf (s, "%u\0", duration);
-    // itoa((int)duration, s, 10);
-    Bluetooth.write(s);
-    Bluetooth.write(" ");
     Bluetooth.write(message);
   }
 }
 
 void sendBT(char tag, double message){
   if(tag == BT){
+    /*
     Bluetooth.write(tag);
     Bluetooth.write(" ");
     unsigned long duration = millis()-globalTime;
@@ -124,6 +98,7 @@ void sendBT(char tag, double message){
       // (int)itoa( duration,s, 10);
     Bluetooth.write(s);
     Bluetooth.write(" ");
+    */
     Bluetooth.write(message);
   }
 }

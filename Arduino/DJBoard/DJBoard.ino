@@ -43,8 +43,9 @@ void loop()
   checkWheelMove();
   checkBoardUp();
   checkKnock();
-  // checkUltraSound();
+  checkUltraSound();
   checkRolling();
+  
 }
 
 
