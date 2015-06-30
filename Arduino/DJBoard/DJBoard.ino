@@ -46,6 +46,7 @@ void loop()
   checkKnock();
   checkUltraSound();
   checkRolling();
+  
 }
 
 
