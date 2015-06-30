@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
+import android.media.audiofx.Equalizer;
 import android.net.Uri;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -28,7 +29,7 @@ public class MusicPlayer {
 
     private static final String SHARED_PREF_SOUND_PATH_PREFIX = "sound_path_";
     private Uri[] soundUris = new Uri[SOUND_POOL_NO];
-    private static final int[] DEFAULT_SOUND_RES_IDS = {R.raw.yooo, R.raw.piano, R.raw.chaser, R.raw.beatbox, R.raw.saw_wave, R.raw.drum_loop, R.raw.piano, R.raw.chaser, R.raw.beatbox};
+    private static final int[] DEFAULT_SOUND_RES_IDS = {R.raw.yooo, R.raw.piano, R.raw.chaser, R.raw.beatbox, R.raw.chaser, R.raw.drum_loop, R.raw.piano, R.raw.chaser, R.raw.beatbox};
 
     public static final String[] SOUND_TITLES = {"Board Up", "Stick Up Right", "Stick Up Left", "Board Turn 180", "UltraSound", "Base Sound 1", "Base Sound 2", "Base Sound 3", "Base Sound 4"};
 
@@ -41,7 +42,7 @@ public class MusicPlayer {
     //public static final int KNOCK_FRONT_SOUND_INDEX = 2;
     //public static final int KNOCK_MID_SOUND_INDEX = 3;
     //public static final int KNOCK_BACK_SOUND_INDEX = 4;
-    public static final int BASE_SOUND_SAW_WAVE_INDEX = 4;
+    public static final int BASE_SOUND_ULTRA_SONIC_INDEX = 4;
 
     public static final int BASE_SOUND_1_INDEX = 5;
     public static final int BASE_SOUND_2_INDEX = 6;
@@ -55,6 +56,7 @@ public class MusicPlayer {
     private Handler handler = new Handler();
 
     private MediaPlayer[] players = new MediaPlayer[SOUND_POOL_NO];
+    private Equalizer equalizer;
 
     private boolean[] soundPlaying = new boolean[SOUND_POOL_NO]; // sparse, depends on if is toggled by the developer
 
@@ -82,14 +84,14 @@ public class MusicPlayer {
     public MusicPlayer(Context context){
         this.context = context;
         initUris();
-        initSoundPool();
+        //initSoundPool();
     }
 
     public void stopAllMusic() {
         for(int i = 0; i < SOUND_POOL_NO; i++){
             stopMusic(i);
-            soundPool.release();
-            initSoundPool();
+            //soundPool.release();
+            //initSoundPool();
             soundPlaying[i] = false;
         }
         handler.removeCallbacksAndMessages(null);
@@ -142,19 +144,39 @@ public class MusicPlayer {
             case "stopRolling":
                 break;
             case "stop_ultrasound":
-                toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_SAW_WAVE_INDEX, 1.0f);
+                stopMusic(BASE_SOUND_ULTRA_SONIC_INDEX);
+                equalizer.setEnabled(false);
                 break;
             default:
                 if(msg.startsWith("ultrasound:")) {
                     String no = msg.substring(11).trim();
                     double noDouble = Double.parseDouble(no);
 
-                    if(!soundPlaying[BASE_SOUND_SAW_WAVE_INDEX]) {
-                        toggleLoopMusicWithNoFromSoundPool(BASE_SOUND_SAW_WAVE_INDEX, 1.0f);
-                    }
-                    float rate = 1.0f + (float) ((noDouble - 40.0) / 40.0);
+                    if(!soundPlaying[BASE_SOUND_ULTRA_SONIC_INDEX]) {
+                        playLoopMusicWithNo(BASE_SOUND_ULTRA_SONIC_INDEX, 1.0f);
+                        int sessionId = players[BASE_SOUND_ULTRA_SONIC_INDEX].getAudioSessionId();
+                        equalizer = new Equalizer(1, sessionId);
+                        equalizer.setEnabled(true);
 
-                    soundPool.setRate(streamIds[BASE_SOUND_SAW_WAVE_INDEX], rate);
+                    }
+
+                    /*
+                    float rate = 1.0f + (float) ((noDouble - 40.0) / 40.0);
+                    soundPool.setRate(streamIds[BASE_SOUND_ULTRA_SONIC_INDEX], rate);
+                    */
+                    ///*
+                    double percentage = noDouble / 140;
+
+                    short[] level = equalizer.getBandLevelRange();
+                    short minLv = (short) (level[0] + (level[1] - level[0]) / 2 * percentage);
+                    short maxLv = (short) (level[1] - (level[1] - level[0]) / 2 * percentage);
+                    short bandCount = equalizer.getNumberOfBands();
+                    short lvStep = (short) ((maxLv - minLv) / (bandCount - 1));
+
+                    for(short i = 0; i < bandCount; i++){
+                        equalizer.setBandLevel(i, (short) (minLv + lvStep * i));
+                    }
+                    //*/
                 }else if(msg.startsWith("v= ")) {
                     try {
                         boardVelocity = Double.parseDouble(msg.substring(3).trim());

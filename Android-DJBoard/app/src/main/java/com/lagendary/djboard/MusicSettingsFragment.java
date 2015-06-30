@@ -37,7 +37,6 @@ public class MusicSettingsFragment extends Fragment {
     private Button setSoundSetButton;
     private Button setBPMButton;
 
-
     private static final int REQUEST_PICK_MUSIC = 27;
 
     public MusicSettingsFragment() {
