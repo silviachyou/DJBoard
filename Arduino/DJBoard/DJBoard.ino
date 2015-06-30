@@ -39,11 +39,12 @@ void setup()
 
 void loop()
 {
+  //printlogln(DEV, "hi!!");
   razorLoop();
   checkWheelMove();
   checkBoardUp();
   checkKnock();
-  // checkUltraSound();
+  checkUltraSound();
   checkRolling();
 }
 
