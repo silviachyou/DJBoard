@@ -51,12 +51,12 @@ void checkKnock(){
    //   printlog(DEV, " , gyro: ");
    //   printlogln(DEV, gyro[2]);
 
-      if(sensorReading1 < 10 && gyro[2] >= 1500){
+      if(sensorReading1 < 10 && sensorReading2 < 10 && gyro[2] >= 1500){
         printlogln(BT, boardturn180);
         printlog(DEV, "board turn 180\n");
         board180_time = millis();
       }
-      if(sensorReading1 < 10 && gyro[2] <= -1500){
+      if(sensorReading1 < 10 && sensorReading2 < 10 && gyro[2] <= -1500){
         printlogln(BT, boardturn180);
         printlog(DEV, "board turn 180\n");
         board180_time = millis();
