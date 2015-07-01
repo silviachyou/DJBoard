@@ -370,7 +370,9 @@ public class MainFragment extends Fragment {
                         case BluetoothService.STATE_LISTEN:
                         case BluetoothService.STATE_NONE:
                             setStatus(R.string.title_not_connected);
-                            resetViews();
+                            try {
+                                resetViews();
+                            }catch (Exception e){}
                             break;
                     }
                     break;

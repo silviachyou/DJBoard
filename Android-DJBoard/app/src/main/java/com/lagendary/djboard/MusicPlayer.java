@@ -29,7 +29,7 @@ public class MusicPlayer {
 
     private static final String SHARED_PREF_SOUND_PATH_PREFIX = "sound_path_";
     private Uri[] soundUris = new Uri[SOUND_POOL_NO];
-    private static final int[] DEFAULT_SOUND_RES_IDS = {R.raw.yooo, R.raw.piano, R.raw.chaser, R.raw.beatbox, R.raw.chaser, R.raw.drum_loop, R.raw.piano, R.raw.chaser, R.raw.beatbox};
+    private static final int[] DEFAULT_SOUND_RES_IDS = {R.raw.yo, R.raw.piano, R.raw.chaser, R.raw.beatbox, R.raw.chaser, R.raw.drum_loop, R.raw.piano, R.raw.chaser, R.raw.beatbox};
 
     public static final String[] SOUND_TITLES = {"Board Up", "Stick Up Right", "Stick Up Left", "Board Turn 180", "UltraSound", "Base Sound 1", "Base Sound 2", "Base Sound 3", "Base Sound 4"};
 
@@ -63,12 +63,14 @@ public class MusicPlayer {
     private Context context;
 
     private static final double VTH1 = 0.0;
-    private static final double VTH2 = 10.0;
-    private static final double VTH3 = 15.0;
-    private static final double VTH4 = 20.0;
+    private static final double VTH2 = 1.0;
+    private static final double VTH3 = 1.7;
+    private static final double VTH4 = 2.0;
 
-    private double prevBoardVelocity = 0;
-    private double boardVelocity = 0;
+    private static final int AUDIO_SESSION = 8;
+
+    private double prevBoardVelocity = -999;
+    private double boardVelocity = -999;
     private Runnable scheduleWheelMoveRunnable = new Runnable() {
 
         @Override
@@ -95,20 +97,21 @@ public class MusicPlayer {
             soundPlaying[i] = false;
         }
         handler.removeCallbacksAndMessages(null);
-        prevBoardVelocity = 0.0;
-        boardVelocity = 0.0;
+        prevBoardVelocity = -999.0;
+        boardVelocity = -999.0;
     }
 
     public boolean actionForMessage(String msg){
         switch (msg) {
             case "wheelmove":
+                boardVelocity = 0.0;
                 handler.post(scheduleWheelMoveRunnable);
                 break;
             case "wheelstop":
                 handler.removeCallbacksAndMessages(null);
-                checkBaseSound(0.0, 1.0);
-                prevBoardVelocity = 0.0;
-                boardVelocity = 0.0;
+                checkBaseSound(-999.0, 1.0);
+                prevBoardVelocity = -999.0;
+                boardVelocity = -999.0;
                 break;
             case "boardup":
                 playMusicOnceWithNo(BOARD_UP_SOUND_INDEX, 1.0f);
@@ -153,8 +156,12 @@ public class MusicPlayer {
                     double noDouble = Double.parseDouble(no);
 
                     if(!soundPlaying[BASE_SOUND_ULTRA_SONIC_INDEX]) {
-                        playLoopMusicWithNo(BASE_SOUND_ULTRA_SONIC_INDEX, 1.0f);
-                        int sessionId = players[BASE_SOUND_ULTRA_SONIC_INDEX].getAudioSessionId();
+                        //playLoopMusicWithNo(BASE_SOUND_ULTRA_SONIC_INDEX, 1.0f);
+                        if( players[BASE_SOUND_1_INDEX] == null){
+                            return false;
+                        }
+
+                        int sessionId = players[BASE_SOUND_1_INDEX].getAudioSessionId();
                         equalizer = new Equalizer(1, sessionId);
                         equalizer.setEnabled(true);
 
@@ -165,7 +172,7 @@ public class MusicPlayer {
                     soundPool.setRate(streamIds[BASE_SOUND_ULTRA_SONIC_INDEX], rate);
                     */
                     ///*
-                    double percentage = noDouble / 140;
+                    double percentage = (Math.min(Math.max(noDouble, 100.0), 140.0) - 100) / 40;
 
                     short[] level = equalizer.getBandLevelRange();
                     short minLv = (short) (level[0] + (level[1] - level[0]) / 2 * percentage);
@@ -190,29 +197,29 @@ public class MusicPlayer {
 
     private void checkBaseSound(double velocity, double prevBoardVelocity){
         if(velocity > prevBoardVelocity){
-            if(velocity > VTH1) {
+            if(velocity >= VTH1) {
                 playLoopMusicWithNo(BASE_SOUND_1_INDEX, 1.0f);
             }
-            if(velocity > VTH2) {
+            if(velocity >= VTH2) {
                 playLoopMusicWithNo(BASE_SOUND_2_INDEX, 1.0f);
             }
-            if(velocity > VTH3) {
+            if(velocity >= VTH3) {
                 playLoopMusicWithNo(BASE_SOUND_3_INDEX, 1.0f);
             }
-            if(velocity > VTH4) {
+            if(velocity >= VTH4) {
                 playLoopMusicWithNo(BASE_SOUND_4_INDEX, 1.0f);
             }
         }else if(velocity < prevBoardVelocity){
-            if(velocity <= VTH1) {
+            if(velocity < VTH1) {
                 stopMusic(BASE_SOUND_1_INDEX);
             }
-            if(velocity <= VTH2) {
+            if(velocity < VTH2) {
                 stopMusic(BASE_SOUND_2_INDEX);
             }
-            if(velocity <= VTH3) {
+            if(velocity < VTH3) {
                 stopMusic(BASE_SOUND_3_INDEX);
             }
-            if(velocity <= VTH4) {
+            if(velocity < VTH4) {
                 stopMusic(BASE_SOUND_4_INDEX);
             }
         }
@@ -316,13 +323,15 @@ public class MusicPlayer {
         playMusic(musicPlayerNo, soundUris[musicPlayerNo], true, volume);
     }
 
-    private void playMusic(int musicPlayerNo, Uri uri, boolean looping, float volume) {
+    private void playMusic(final int musicPlayerNo, Uri uri, boolean looping, float volume) {
         stopMusic(musicPlayerNo);
         try {
             if (players[musicPlayerNo] == null) {
                 players[musicPlayerNo] = MediaPlayer.create(context, uri);
             }
             players[musicPlayerNo].setLooping(looping);
+
+            //players[musicPlayerNo].setLooping(looping);
             players[musicPlayerNo].setVolume(volume, volume);
             players[musicPlayerNo].start();
         }catch(Exception e){
