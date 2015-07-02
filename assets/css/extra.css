@@ -17,6 +17,10 @@
 	border-radius: 100%;
 }
 
+.member img:hover{
+	opacity: 0.6;
+}
+
 .main-icon{
 	position: relative;
 	top: -2em;
