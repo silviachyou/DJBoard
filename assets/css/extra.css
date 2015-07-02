@@ -25,3 +25,7 @@
 	background-color: rgba(0,0,0,0);
 }
 
+.icon.featured.fa-mobile.fa-lg{
+	top: -12px;
+	margin-bottom: 0px;
+}
