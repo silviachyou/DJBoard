@@ -6,17 +6,17 @@
 
 #member-list li{
 	display: inline-block;
-	
-	margin: 20px;
 }
 
 .member img{
-	width: 150px;
+	width: 140px;
+	margin: 20px;
 	height: auto;
 	border-radius: 100%;
 }
 
 .member p{
+	margin-bottom: 8px;
 	text-align: center;
 }
 
