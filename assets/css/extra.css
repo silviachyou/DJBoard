@@ -5,16 +5,19 @@
 }
 
 #member-list li{
-
 	display: inline-block;
-	width: 15%;
-	margin: 5px;
+	
+	margin: 20px;
 }
 
 .member img{
-	width: 170px;
+	width: 165px;
 	height: auto;
 	border-radius: 100%;
+}
+
+.member p{
+	text-align: center;
 }
 
 
