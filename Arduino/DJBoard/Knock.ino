@@ -27,7 +27,7 @@ void checkKnock(){
   //printlogln(DEV, gyro[2]);
   
 
-   if(millis() - stickup_time > 1000){
+   if(millis() - stickup_time > 500){
 
 
       if(sensorReading2 >= 1 && gyro[2] >= 1500){
