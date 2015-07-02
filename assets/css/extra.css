@@ -7,15 +7,16 @@
 #member-list li{
 
 	display: inline-block;
-	
+	width: 15%;
+	margin: 5px;
 }
 
 .member img{
-	margin: 25px;
-	width: 160px;
+	width: 170px;
 	height: auto;
 	border-radius: 100%;
 }
+
 
 .member img:hover{
 	opacity: 0.6;
