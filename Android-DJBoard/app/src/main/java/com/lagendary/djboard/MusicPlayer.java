@@ -56,16 +56,16 @@ public class MusicPlayer {
     private Handler handler = new Handler();
 
     private MediaPlayer[] players = new MediaPlayer[SOUND_POOL_NO];
-    private Equalizer equalizer;
+    private Equalizer[] eqs = new Equalizer[SOUND_POOL_NO];
 
     private boolean[] soundPlaying = new boolean[SOUND_POOL_NO]; // sparse, depends on if is toggled by the developer
 
     private Context context;
 
     private static final double VTH1 = 0.0;
-    private static final double VTH2 = 1.0;
-    private static final double VTH3 = 1.7;
-    private static final double VTH4 = 2.0;
+    private static final double VTH2 = 1.2;
+    private static final double VTH3 = 5.0;
+    private static final double VTH4 = 10.0;
 
     private static final int AUDIO_SESSION = 8;
 
@@ -148,7 +148,13 @@ public class MusicPlayer {
                 break;
             case "stop_ultrasound":
                 stopMusic(BASE_SOUND_ULTRA_SONIC_INDEX);
-                equalizer.setEnabled(false);
+                for(int i = 0; i < eqs.length; i++){
+                    if(eqs[i] != null) {
+                        eqs[i].setEnabled(false);
+                        eqs[i] = null;
+                    }
+                }
+
                 break;
             default:
                 if(msg.startsWith("ultrasound:")) {
@@ -161,29 +167,37 @@ public class MusicPlayer {
                             return false;
                         }
 
-                        int sessionId = players[BASE_SOUND_1_INDEX].getAudioSessionId();
-                        equalizer = new Equalizer(1, sessionId);
-                        equalizer.setEnabled(true);
-
                     }
 
-                    /*
-                    float rate = 1.0f + (float) ((noDouble - 40.0) / 40.0);
-                    soundPool.setRate(streamIds[BASE_SOUND_ULTRA_SONIC_INDEX], rate);
-                    */
-                    ///*
-                    double percentage = (Math.min(Math.max(noDouble, 100.0), 140.0) - 100) / 40;
+                    for(int i = 0; i < eqs.length; i++) {
+                        if(players[i] == null){
+                            continue;
+                        }
 
-                    short[] level = equalizer.getBandLevelRange();
-                    short minLv = (short) (level[0] + (level[1] - level[0]) / 2 * percentage);
-                    short maxLv = (short) (level[1] - (level[1] - level[0]) / 2 * percentage);
-                    short bandCount = equalizer.getNumberOfBands();
-                    short lvStep = (short) ((maxLv - minLv) / (bandCount - 1));
+                        if (eqs[i] == null) {
+                            int sessionId = players[i].getAudioSessionId();
+                            eqs[i] = new Equalizer(1, sessionId);
+                            eqs[i].setEnabled(true);
+                        }
 
-                    for(short i = 0; i < bandCount; i++){
-                        equalizer.setBandLevel(i, (short) (minLv + lvStep * i));
+                        /*
+                        float rate = 1.0f + (float) ((noDouble - 40.0) / 40.0);
+                        soundPool.setRate(streamIds[BASE_SOUND_ULTRA_SONIC_INDEX], rate);
+                        */
+                        ///*
+                        double percentage = (Math.min(Math.max(noDouble, 100.0), 140.0) - 100) / 40;
+
+                        short[] level = eqs[i].getBandLevelRange();
+                        short minLv = (short) (level[0] + (level[1] - level[0]) / 2 * percentage);
+                        short maxLv = (short) (level[1] - (level[1] - level[0]) / 2 * percentage);
+                        short bandCount = eqs[i].getNumberOfBands();
+                        short lvStep = (short) ((maxLv - minLv) / (bandCount - 1));
+
+                        for (short j = 0; j < bandCount; j++) {
+                            eqs[i].setBandLevel(j, (short) (minLv + lvStep * j));
+                        }
+                        //*/
                     }
-                    //*/
                 }else if(msg.startsWith("v= ")) {
                     try {
                         boardVelocity = Double.parseDouble(msg.substring(3).trim());

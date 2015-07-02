@@ -30,12 +30,12 @@ void checkKnock(){
    if(millis() - stickup_time > 1000){
 
 
-      if(sensorReading2 > 18 && gyro[2] >= 1500){
+      if(sensorReading2 >= 1 && gyro[2] >= 1500){
         printlogln(BT, stickUpLeft);
          printlogln(DEV, "stick up!");
         stickup_time = millis();
       }
-      if(sensorReading2 > 18 && gyro[2] <= -1500){
+      if(sensorReading2 >= 1 && gyro[2] <= -1500){
         printlogln(BT, stickUpRight);
          printlogln(DEV, "stick up!");
         stickup_time = millis();
@@ -51,12 +51,12 @@ void checkKnock(){
    //   printlog(DEV, " , gyro: ");
    //   printlogln(DEV, gyro[2]);
 
-      if(sensorReading1 < 20 && sensorReading2 < 10 && gyro[2] >= 1500){
+      if(sensorReading1 < 20 && sensorReading2 < 1 && gyro[2] >= 1500){
         printlogln(BT, boardturn180);
         printlog(DEV, "board turn 180\n");
         board180_time = millis();
       }
-      if(sensorReading1 < 20 && sensorReading2 < 10 && gyro[2] <= -1500){
+      if(sensorReading1 < 20 && sensorReading2 < 1 && gyro[2] <= -1500){
         printlogln(BT, boardturn180);
         printlog(DEV, "board turn 180\n");
         board180_time = millis();

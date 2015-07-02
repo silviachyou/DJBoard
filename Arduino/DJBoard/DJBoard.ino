@@ -50,25 +50,6 @@ void loop()
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /***************************************************************************************************************
 * Razor AHRS Firmware v1.4.2
 * 9 Degree of Measurement Attitude and Heading Reference System
@@ -148,33 +129,33 @@ void loop()
     X axis pointing forward (towards the short edge with the connector holes)
     Y axis pointing to the right
     and Z axis pointing down.
-
+    
   Positive yaw   : clockwise
   Positive roll  : right wing down
   Positive pitch : nose up
-
+  
   Transformation order: first yaw then pitch then roll.
 */
 
 /*
   Serial commands that the firmware understands:
-
+  
   "#o<params>" - Set OUTPUT mode and parameters. The available options are:
-
+  
       // Streaming output
       "#o0" - DISABLE continuous streaming output. Also see #f below.
       "#o1" - ENABLE continuous streaming output.
-
+      
       // Angles output
       "#ob" - Output angles in BINARY format (yaw/pitch/roll as binary float, so one output frame
               is 3x4 = 12 bytes long).
       "#ot" - Output angles in TEXT format (Output frames have form like "#YPR=-142.28,-5.38,33.52",
               followed by carriage return and line feed [\r\n]).
-
+      
       // Sensor calibration
       "#oc" - Go to CALIBRATION output mode.
       "#on" - When in calibration mode, go on to calibrate NEXT sensor.
-
+      
       // Sensor data output
       "#osct" - Output CALIBRATED SENSOR data of all 9 axes in TEXT format.
                 One frame consist of three lines - one for each sensor: acc, mag, gyr.
@@ -190,32 +171,32 @@ void loop()
                 One frame consist of three 3x3 float values = 36 bytes. Order is: acc x/y/z, mag x/y/z, gyr x/y/z.
       "#osbb" - Output BOTH raw and calibrated SENSOR data of all 9 axes in BINARY format.
                 One frame consist of 2x36 = 72 bytes - like #osrb and #oscb combined (first RAW, then CALIBRATED).
-
-      // Error message output
+      
+      // Error message output        
       "#oe0" - Disable ERROR message output.
       "#oe1" - Enable ERROR message output.
-
-
+    
+    
   "#f" - Request one output frame - useful when continuous output is disabled and updates are
          required in larger intervals only. Though #f only requests one reply, replies are still
          bound to the internal 20ms (50Hz) time raster. So worst case delay that #f can add is 19.99ms.
-
-
+         
+         
   "#s<xy>" - Request synch token - useful to find out where the frame boundaries are in a continuous
          binary stream or to see if tracker is present and answering. The tracker will send
          "#SYNCH<xy>\r\n" in response (so it's possible to read using a readLine() function).
          x and y are two mandatory but arbitrary bytes that can be used to find out which request
          the answer belongs to.
-
-
+          
+          
   ("#C" and "#D" - Reserved for communication with optional Bluetooth module.)
-
+  
   Newline characters are not required. So you could send "#ob#o1#s", which
   would set binary output mode, enable continuous streaming output and request
   a synch token all at once.
-
+  
   The status LED will be on if streaming output is enabled and off otherwise.
-
+  
   Byte order of binary output is little-endian: least significant byte comes first.
 */
 
@@ -406,7 +387,8 @@ const float magn_ellipsoid_transform[3][3] = {{0.902, -0.00354, 0.000636}, {-0.0
 // Stuff
 #define STATUS_LED_PIN 13  // Pin number of status LED
 #define GRAVITY 256.0f // "1G reference" used for DCM filter and accelerometer calibration
-
+#define TO_RAD(x) (x * 0.01745329252)  // *pi/180
+#define TO_DEG(x) (x * 57.2957795131)  // *180/pi
 
 // Sensor variables
 float accel[3];  // Actually stores the NEGATED acceleration (equals gravity, if board not moving).
@@ -435,7 +417,6 @@ float errorYaw[3] = {0, 0, 0};
 float DCM_Matrix[3][3] = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
 float Update_Matrix[3][3] = {{0, 1, 2}, {3, 4, 5}, {6, 7, 8}};
 float Temporary_Matrix[3][3] = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
-
 
 
 // DCM timing in the main loop
@@ -468,24 +449,24 @@ void reset_sensor_fusion() {
 
   read_sensors();
   timestamp = millis();
-
+  
   // GET PITCH
   // Using y-z-plane-component/x-component of gravity vector
   pitch = -atan2(accel[0], sqrt(accel[1] * accel[1] + accel[2] * accel[2]));
-
+	
   // GET ROLL
-  // Compensate pitch of gravity vector
+  // Compensate pitch of gravity vector 
   Vector_Cross_Product(temp1, accel, xAxis);
   Vector_Cross_Product(temp2, xAxis, temp1);
   // Normally using x-z-plane-component/y-component of compensated gravity vector
   // roll = atan2(temp2[1], sqrt(temp2[0] * temp2[0] + temp2[2] * temp2[2]));
   // Since we compensated for pitch, x-z-plane-component equals z-component:
   roll = atan2(temp2[1], temp2[2]);
-
+  
   // GET YAW
   Compass_Heading();
   yaw = MAG_Heading;
-
+  
   // Init rotation matrix
   init_rotation_matrix(DCM_Matrix, yaw, pitch, roll);
 }
@@ -521,7 +502,7 @@ void check_reset_calibration_session()
 
   // Reset this calibration session?
   if (!reset_calibration_session_flag) return;
-
+  
   // Reset acc and mag calibration variables
   for (int i = 0; i < 3; i++) {
     accel_min[i] = accel_max[i] = accel[i];
@@ -531,7 +512,7 @@ void check_reset_calibration_session()
   // Reset gyro calibration variables
   gyro_num_samples = 0;  // Reset gyro calibration averaging
   gyro_average[0] = gyro_average[1] = gyro_average[2] = 0.0f;
-
+  
   reset_calibration_session_flag = false;
 }
 
@@ -558,7 +539,7 @@ void razorSetup()
 {
   // Init serial output
   Serial.begin(OUTPUT__BAUD_RATE);
-
+  
   // Init status LED
   pinMode (STATUS_LED_PIN, OUTPUT);
   digitalWrite(STATUS_LED_PIN, LOW);
@@ -569,7 +550,7 @@ void razorSetup()
   Accel_Init();
   Magn_Init();
   Gyro_Init();
-
+  
   // Read sensors, init DCM algorithm
   delay(20);  // Give sensors enough time to collect data
   reset_sensor_fusion();
@@ -599,11 +580,11 @@ void razorLoop()
         byte id[2];
         id[0] = readChar();
         id[1] = readChar();
-
+        
         // Reply with synch message
-    //    Serial.print("#SYNCH");
-     //   Serial.write(id, 2);
-      //  Serial.println();
+        Serial.print("#SYNCH");
+        Serial.write(id, 2);
+        Serial.println();
       }
       else if (command == 'o') // Set _o_utput mode
       {
@@ -661,10 +642,10 @@ void razorLoop()
           else if (error_param == '1') output_errors = true;
           else if (error_param == 'c') // get error count
           {
-          //  Serial.print("#AMG-ERR:");
-          //  Serial.print(num_accel_errors); Serial.print(",");
-         //   Serial.print(num_magn_errors); Serial.print(",");
-       //     Serial.println(num_gyro_errors);
+            Serial.print("#AMG-ERR:");
+            Serial.print(num_accel_errors); Serial.print(",");
+            Serial.print(num_magn_errors); Serial.print(",");
+            Serial.println(num_gyro_errors);
           }
         }
       }
@@ -702,23 +683,23 @@ void razorLoop()
     {
       // Apply sensor calibration
       compensate_sensor_errors();
-
+    
       // Run DCM algorithm
       Compass_Heading(); // Calculate magnetic heading
       Matrix_update();
       Normalize();
       Drift_correction();
       Euler_angles();
-
+      
       if (output_stream_on || output_single_on) output_angles();
     }
     else  // Output sensor values
-    {
+    {      
       if (output_stream_on || output_single_on) output_sensors();
     }
-
+    
     output_single_on = false;
-
+    
 #if DEBUG__PRINT_LOOP_TIME == true
     Serial.print("loop time (ms) = ");
     Serial.println(millis() - timestamp);
